@@ -24,14 +24,29 @@
         const duplicate_detect = "{{$duplicate}}";
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>{{$roomID}}</title>
 </head>
 <body>
-    @yield('MR_room')
+    <div class="row w-100 vh-100 p-0 m-0" style="width: 100%;">
+        <div class="col p-0" id="webcam_or_mic_in_use" style="max-width: 20%;">
+            @include('meetingRoom.room_details.webcam_mic')
+        </div>
+        <div class="col p-0 m-0" id="host_video_whiteboard" style="max-width: 50%;">
+            @include('meetingRoom.room_details.host_whiteboard_video')
+        </div>
+        <div class="col p-0 m-0 vh-100" id="M_C_list" style="max-width: 25%;">
+            @include('meetingRoom.room_details.m_c_list')
+        </div>
+        <div class="col" id="sidebar" style="max-width: 5%;">
+            @include('meetingRoom.room_details.sidebar')
+        </div>
+
+    </div>
+
 </body>
 <script src="{{ asset('jquery.js') }}"></script>
-<script defer src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"defer></script>
-<script src="/js/meetingRoom/meetingRoom_make_connection.js" defer></script>
+{{-- <script defer src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
+<script src="/js/meetingRoom/meetingRoom_make_connection.js" defer></script> --}}
 </html>
