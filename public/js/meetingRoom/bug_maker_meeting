@@ -1,0 +1,354 @@
+
+const same_user_join_room = 
+`
+<div class="card" max-width="23rem">
+<div class="card-body">
+<h1>same user join Room,pls reconnect again</h1>
+<button id="same_user_detect" > reconnect </button>
+</div>
+</div>
+`;
+const room_videos_div = `
+<div id="videos_connection" class="row bg-danger w-100">
+<video id="localVideo" class="col bg-dark w-50"></video>
+<div id="remoteVideos" class="col bg-dark w-50"></div>
+</div>
+`;
+
+
+
+let local_stream;
+var peer_test = get_peer_info_after_connection(MY_UNIQUE_ID);
+
+console.log(peer_test,"peer_test Disconnect test");
+
+let peer;
+console.log(peer_test,"peer_test");
+get_display_camera();
+
+setTimeout(()=>{
+    if (peer_test.id == null) {
+        console.log(null, "detect");
+        peer = same_user_detect(peer_test);
+    }else{
+        peer = peer_test;
+    }
+    peer_connection(peer);
+    console.log(peer_test,"setTimeout");
+},1000)
+
+
+
+// setTimeout(()=>{
+//     if (peer.destroyed != false) {
+//         if (duplicate_detect == "true") {
+//             same_user_detect(peer);
+//             peer_connection(peer);
+//         }else{
+//             peer_connection(peer)
+//         }
+//     }else{
+//         peer_connection(peer);
+//     }
+// },1000)
+function get_peer_info_after_connection(id_get) {
+    var peer = new Peer(id_get, {
+        host: '/',
+        port: '3002',
+    })
+
+    console.log(peer," |<>| ",peer['_open'],"get_peer_info_after_connection");
+    return peer
+}
+
+document.getElementById("share_screen").addEventListener("click",async (e)=>{
+    await get_display_share()
+    console.log(peer);
+    get_members_peer_ids(ROOM_UUID,USER_ID,peer)
+
+})
+
+
+
+
+document.getElementById("camera").addEventListener("click",async (e)=>{
+    await get_display_camera()
+    console.log(peer);
+    get_members_peer_ids(ROOM_UUID,USER_ID,peer)
+
+})
+
+
+
+
+function same_user_detect(peer) {
+
+    const get_peer_id = peer.id;
+
+    if (get_peer_id == null) {
+        const peer_rec = new Peer(MY_UNIQUE_ID + "_reconnect", {
+            host: '/',
+            port: '3002'
+        })
+        peer_rec.on("open", id => {
+            document.getElementById("room_id").innerText = id;
+            var conn = peer_rec.connect(MY_UNIQUE_ID);
+            conn.on('open', () => {
+                conn.send({"user-reconnect":MY_UNIQUE_ID})
+            })
+        })
+        peer_rec.on('connection', (conn) => {
+            conn.on('data', (data) => {
+                peer_rec.destroy();
+                const peer = new Peer(MY_UNIQUE_ID, {
+                    host: '/',
+                    port: '3002'
+                })
+                document.getElementById('div_asli').innerHTML = room_videos_div;
+                // get_display_camera();
+                console.log(peer,"peer_rec");
+                console.log('another page using this id,pls wait',peer_rec);
+                return peer;
+
+            });
+        });
+    }
+}
+
+function refresh_page() {
+    location.reload();
+}
+
+
+function peer_connection(peer) {
+    get_members_peer_ids(ROOM_UUID,USER_ID,peer);
+    document.getElementById("room_id").innerText = peer.id;
+
+
+    peer.on('connection', (conn) => {
+        conn.on('data', (data) => {
+            switch (Object.keys(data)[0]) {
+                case "user-reconnect":
+                    var conn = peer.connect(data['user-reconnect'] + '_reconnect');
+    
+                    conn.on('open', () => {
+                        conn.send({"force-refresh":MY_UNIQUE_ID})
+                        peer.disconnect();
+                        peer.destroy();
+                        document.getElementById('videos_connection').remove();
+                        var div = document.createElement('div');
+                        div.innerHTML = same_user_join_room;
+                        document.getElementById("div_asli").append(div);
+                        document.getElementById("same_user_detect").addEventListener("click",()=>{
+                            console.log("clicked");
+                            same_user_detect(peer);
+                        })
+
+
+                    })
+                    break;
+            }
+        });
+    });
+
+
+
+    peer.on('call',(call)=>{
+        var conn = peer.connect(call['peer']);
+        var fr_id = (call['peer']).split("_")[1]
+        conn.on('close', () => {
+            $.ajax({
+                type: "POST",
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: path+'/member_disconnect',
+                data: {
+                    _token : $('meta[name="csrf-token"]').attr('content'), 
+                    username:USER_NAME,
+                    hashtag:USER_HAHSTAG,
+                    user_id:USER_ID,
+                    user_token:USER_TOKEN,
+                    my_id: USER_ID,
+                    fr_id:fr_id,
+                    room_uuid: ROOM_UUID,
+                },
+                dataType: "json",
+            });
+            console.log({"user-disconnect":call['peer']});
+        })
+        call.answer(local_stream);
+        call.on("stream",stream=>{
+            const remoteVideos_div = document.getElementById("remoteVideos");
+            if (document.getElementById(call['peer'])) {
+                document.getElementById(call['peer']).srcObject = stream;
+            }else{
+                var video_playr = document.createElement('video')
+                video_playr.id = call['peer']
+                video_playr.setAttribute("class",'col')
+                video_playr.srcObject = stream;
+                remoteVideos_div.append(video_playr)
+                video_playr.onloadedmetadata =()=>{video_playr.play()};
+            }
+    
+        })
+    })
+    
+    
+
+
+
+
+}
+
+
+
+
+function get_members_peer_ids(room_uuid,my_id,peer) {
+    console.log(peer,"get_members_peer_ids");
+
+    $.ajax({
+        type: "POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: path+'/get_members_peer_id',
+        data: {
+            _token : $('meta[name="csrf-token"]').attr('content'), 
+            username:USER_NAME,
+            hashtag:USER_HAHSTAG,
+            user_id:USER_ID,
+            user_token:USER_TOKEN,
+            my_id: my_id,
+            room_uuid: room_uuid,
+        },
+        dataType: "text",
+        success: function(resultData) {start_connection(resultData,peer)}
+    });
+
+}
+function start_connection(data,peer) {
+    console.log(peer,"start_connection");
+
+    Members = JSON.parse(data.split(','))
+    for (let i = 0; i < Members.length; i++) {
+        const m_id = Object.keys(Members[i])[0]
+        const m_P_id = Members[i][m_id]
+        var call = peer.call(m_P_id, local_stream);
+        // check_Member_connection_status(m_P_id);
+
+        call.on('stream', function(remoteStream) {
+
+            var conn = peer.connect(m_P_id);
+            conn.on('open', () => {
+                conn.send({"user-connect":MY_UNIQUE_ID})
+            })
+            const remoteVideos_div = document.getElementById("remoteVideos");
+            if (document.getElementById(m_P_id)) {
+                document.getElementById(m_P_id).srcObject = remoteStream;
+            }else{
+                var video_playr = document.createElement('video')
+                video_playr.id = m_P_id
+                video_playr.setAttribute("class",'col')
+                video_playr.srcObject = remoteStream;
+                remoteVideos_div.append(video_playr)
+                video_playr.onloadedmetadata =()=>{video_playr.play()};
+            }
+
+        });
+    }
+}
+
+
+
+
+
+
+async function get_display_camera() {
+    var getUserMedia = await (navigator.getUserMedia ||  navigator.webkitGetUserMedia ||  navigator.mozGetUserMedia);
+
+    getUserMedia({video: true, audio: false}, function(stream) {
+        local_stream = stream;
+        const my_video = document.getElementById("localVideo");
+        my_video.srcObject = local_stream;
+        my_video.onloadedmetadata=()=>{my_video.play()};
+
+    }, function(err) {
+    console.log('Failed to get local stream' ,err);
+    });
+
+}
+
+function check_Member_connection_status(M_peer_id) {
+    setInterval(()=>{
+        var M_peer_id_call = peer.connect(M_peer_id);
+        setTimeout(()=>{
+            if (M_peer_id_call['_open'] === true) {
+                console.log({'user_online✅':M_peer_id});
+            }else{
+                console.log({'user_offline❌':M_peer_id});
+            }
+        },200)
+    },1000)
+}
+
+
+
+async function get_display_share() {
+    var getUserMedia = undefined;
+    getUserMedia = await navigator.mediaDevices.getDisplayMedia();
+    local_stream = getUserMedia;
+    const my_video = document.getElementById("localVideo");
+    my_video.srcObject = local_stream;
+    
+    my_video.onloadedmetadata=()=>{my_video.play()};
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+// getUserMedia({video: true, audio: false}, function(stream) {
+//     console.log(stream);
+    // local_stream = stream;
+    // const my_video = document.getElementById("localVideo");
+    // my_video.srcObject = local_stream;
+    // my_video.onloadedmetadata=()=>{my_video.play()};
+
+// }, function(err) {
+// console.log('Failed to get local stream' ,err);
+// });
+////////////////////////////////////////////////////////////
+// var getUserMedia = undefined;
+// getUserMedia = await navigator.mediaDevices.getDisplayMedia();
+
+
+// local_stream = getUserMedia;
+// const my_video = document.getElementById("localVideo");
+// my_video.srcObject = local_stream;
+
+// my_video.onloadedmetadata=()=>{my_video.play()};
