@@ -29,19 +29,18 @@
 </head>
 <body>
     <div class="row w-100 vh-100 p-0 m-0" style="width: 100%;">
-        <div class="col p-0" id="webcam_or_mic_in_use" style="max-width: 20%;">
+        <div class="col p-0" id="webcam_or_mic_in_use" style="max-width: 15%;">
             @include('meetingRoom.room_details.webcam_mic')
         </div>
-        <div class="col p-0 m-0" id="host_video_whiteboard" style="max-width: 50%;">
+        <div class="col p-0 m-0 vh-100" id="host_video_whiteboard" style="max-width: 50%;">
             @include('meetingRoom.room_details.host_whiteboard_video')
         </div>
-        <div class="col p-0 m-0 vh-100" id="M_C_list" style="max-width: 25%;">
+        <div class="col p-0 m-0 vh-100" id="M_C_list" style="max-width: 30%;">
             @include('meetingRoom.room_details.m_c_list')
         </div>
         <div class="col" id="sidebar" style="max-width: 5%;">
             @include('meetingRoom.room_details.sidebar')
         </div>
-
     </div>
 
 </body>

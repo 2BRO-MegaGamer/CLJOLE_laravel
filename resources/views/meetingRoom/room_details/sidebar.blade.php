@@ -26,7 +26,6 @@
             
         </ul>
         <div class="m-auto text-center border-top" style="height: 10%;">
-
             <button class="btn btn-light rounded-0 w-100 h-50"><i class="bi bi-flag"></i></button>
             <button class="btn btn-danger rounded-0 w-100 h-50"><i class="bi bi-box-arrow-right"></i></button>
         </div>
