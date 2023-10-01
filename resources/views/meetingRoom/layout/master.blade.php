@@ -28,23 +28,27 @@
     <title>{{$roomID}}</title>
 </head>
 <body>
-    <div class="row w-100 vh-100 p-0 m-0" style="width: 100%;">
-        <div class="col p-0" id="webcam_or_mic_in_use" style="max-width: 15%;">
-            @include('meetingRoom.room_details.webcam_mic')
+    <div class=" vh-100 p-0 m-0" style="max-width: 100%;">
+        <div class="row p-0 m-0 " style="width: 100%;">
+            <div class="col p-0" id="webcam_or_mic_in_use" style="max-width: 10%;">
+                @include('meetingRoom.room_details.webcam_mic')
+            </div>
+            <div class="col p-0 m-0 vh-100 bg-dark" id="host_video_whiteboard" style="max-width: 65%;">
+                @include('meetingRoom.room_details.host_whiteboard_video')
+            </div>
+            <div class="col p-0 m-0 position-relative vh-100 " id="M_C_list"  style="max-width: 20%;">
+                @include('meetingRoom.room_details.m_c_list')
+            </div>
         </div>
-        <div class="col p-0 m-0 vh-100" id="host_video_whiteboard" style="max-width: 50%;">
-            @include('meetingRoom.room_details.host_whiteboard_video')
-        </div>
-        <div class="col p-0 m-0 vh-100" id="M_C_list" style="max-width: 30%;">
-            @include('meetingRoom.room_details.m_c_list')
-        </div>
-        <div class="col" id="sidebar" style="max-width: 5%;">
+        <div id="sidebar" style="max-width: 5%;">
             @include('meetingRoom.room_details.sidebar')
         </div>
     </div>
 
+
 </body>
 <script src="{{ asset('jquery.js') }}"></script>
+<script src="/js/meetingRoom/room_detail/master_page_resize.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"defer></script>
 {{-- <script defer src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
 <script src="/js/meetingRoom/meetingRoom_make_connection.js" defer></script> --}}

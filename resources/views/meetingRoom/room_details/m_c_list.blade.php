@@ -1,4 +1,10 @@
-<div class="w-100 h-100 border text-center" style="background:rgb(80, 80, 80);">
+
+<div class="position-absolute start-0 z-2 top-0">
+    <button id="close_m_c_list" class="btn btn-danger p-0 m-0"><i class="bi bi-x fs-3"></i></button>
+</div>
+
+
+<div id="chat_message_div" class="w-100 h-100 border text-center" style="background:rgb(80, 80, 80);display:none;">
     <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 85%;">
         <div class="d-block">
             @for ($i = 0; $i < 50; $i++)
@@ -26,7 +32,7 @@
     </div>
 </div>
 
-<div class="w-100 h-100 border " style="background:rgb(80, 80, 80);display:none;">
+<div id="members_list_div" class="w-100 h-100 border " style="background:rgb(80, 80, 80);display:none;">
     <div id="members_info_scroll_style" class="list-group overflow-auto rounded-0"  style="max-height: 100%;">
         <div class="dropdown">
             <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -75,9 +81,8 @@
         </div>
         @endfor
     </div>
-
 </div>
-
+<script src="/js/meetingRoom/room_detail/m_c_list.js"></script>
 
 
 <style>
@@ -106,4 +111,6 @@
     background-color: darkgrey;
     outline: 1px solid slategrey;
 }
+
+
 </style>
