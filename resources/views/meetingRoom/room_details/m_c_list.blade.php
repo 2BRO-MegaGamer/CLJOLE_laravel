@@ -1,10 +1,10 @@
 
 <div class="position-absolute start-0 z-2 top-0">
-    <button id="close_m_c_list" class="btn btn-danger p-0 m-0"><i class="bi bi-x fs-3"></i></button>
+    <button id="close_m_c_list" class="btn btn-danger rounded-0 p-0 m-0"><i class="bi bi-x fs-3"></i></button>
 </div>
 
 
-<div id="chat_message_div" class="w-100 h-100 border text-center" style="background:rgb(80, 80, 80);display:none;">
+<div id="chat_message_div" class="h-100 border text-center" style="background:rgb(80, 80, 80);display:none;">
     <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 85%;">
         <div class="d-block">
             @for ($i = 0; $i < 50; $i++)
@@ -74,6 +74,7 @@
                         <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-3"></i></button>
                         <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-3"></i></button>
                         <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-3"></i></button>
+                        <button class="col btn btn-light rounded-0 text-warning " href="#"><i class="bi bi-flag  fs-3"></i></button>
                         <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-3"></i></button>
                     </div>
                 </div>

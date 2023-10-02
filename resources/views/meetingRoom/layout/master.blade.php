@@ -30,10 +30,10 @@
 <body>
     <div class=" vh-100 p-0 m-0" style="max-width: 100%;">
         <div class="row p-0 m-0 " style="width: 100%;">
-            <div class="col p-0" id="webcam_or_mic_in_use" style="max-width: 10%;">
+            <div class="col p-0 vh-100" id="webcam_or_mic_in_use" style="max-width: 15%;">
                 @include('meetingRoom.room_details.webcam_mic')
             </div>
-            <div class="col p-0 m-0 vh-100 bg-dark" id="host_video_whiteboard" style="max-width: 65%;">
+            <div class="col p-0 m-0 vh-100 bg-dark" id="host_video_whiteboard" style="max-width: 60%;">
                 @include('meetingRoom.room_details.host_whiteboard_video')
             </div>
             <div class="col p-0 m-0 position-relative vh-100 " id="M_C_list"  style="max-width: 20%;">
