@@ -26,7 +26,7 @@
                 <label for="floatingTextarea">Message</label>
             </div>
             <div style="height: 32%">
-                <button class="btn btn-info w-100 h-100 rounded-0"><i class="bi bi-mic fs-4"></i></button>
+                <button class="btn btn-info w-100 h-100 rounded-0"><i class="bi bi-file-earmark-arrow-up fs-4"></i></button>
             </div>
         </div>
     </div>
