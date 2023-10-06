@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HeaderController;
+use App\Http\Controllers\inRoomController;
 use App\Models\ChatInfo;
 use Database\Factories\ChatInfoFactory;
 use GuzzleHttp\Promise\Create;
@@ -79,6 +80,20 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/get_members_peer_id',[MeetingRoomController::class,'get_members_peer_id']);
         Route::post('/member_disconnect',[MeetingRoomController::class,'member_disconnect']);
+
+
+
+
+
+        /////////////////////////inROOOM/////////////////////////
+
+
+        Route::post('/members_cannot_make_connection_to_member',[inRoomController::class,'members_cannot_make_connection_to_member']);
+
+
+        /////////////////////////inROOOM/////////////////////////
+
+
 
     });
     ////////////////MeetingRoom/////////////////

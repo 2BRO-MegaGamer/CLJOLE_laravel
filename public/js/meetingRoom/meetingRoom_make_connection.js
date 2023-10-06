@@ -1,4 +1,49 @@
 var peer_first = peer_connection(MY_UNIQUE_ID);
+let local_stream = undefined;
+
+function make_empty_media_stream(voice_or_video) {
+
+    const createEmptyAudioTrack = () => {
+        const ctx = new AudioContext();
+        const oscillator = ctx.createOscillator();
+        const dst = oscillator.connect(ctx.createMediaStreamDestination());
+        oscillator.start();
+        const track = dst.stream.getAudioTracks()[0];
+        return Object.assign(track, { enabled: false });
+    };
+
+    const createEmptyVideoTrack = ({ width, height }) => {
+        const canvas = Object.assign(document.createElement('canvas'), { width, height });
+        canvas.getContext('2d').fillRect(0, 0, width, height);
+        const stream = canvas.captureStream();
+        const track = stream.getVideoTracks()[0];
+        return Object.assign(track, { enabled: false });
+    };
+
+    const audioTrack = createEmptyAudioTrack();
+    const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
+    if (voice_or_video === 'voice') {
+        local_stream = new MediaStream([audioTrack]);
+        return new MediaStream([audioTrack]);
+        
+    }else{
+        local_stream = new MediaStream([audioTrack]);
+
+        return new MediaStream([audioTrack, videoTrack]);
+        
+    }
+}
+
+
+async function get_voice_media_stream() {
+    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    await getUserMedia({ audio: true}, function(stream) {
+        return stream;
+    }, function(err) {
+        console.log('Failed to get local stream' ,err);
+    });
+}
+
 
 
 function peer_connected(peer_get) {
@@ -25,26 +70,61 @@ function peer_connected(peer_get) {
     make_connection_to_anothers_peer(ROOM_UUID,peer,null);
 
 
+    peer.on('call',(call)=>{
+        var conn = peer.connect(call['peer']);
+        var fr_id = (call['peer']).split("_")[1]
+        conn.on('close', () => {
 
+        })
+        console.log("get call",call.metadata);
+        
+        call.answer(local_stream);
+        var call_detail = (call.metadata)['call_detail'];
+        var mediastream_detail = (call.metadata)['mediaStream'];
+        call.on("stream",stream=>{
+            if ((mediastream_detail)['empty'] === true) {
+                var html_card_voice_diabled = make_card_for_voice_chat_card(call_detail['userName'],call_detail['hashtag'],call_detail['fr_peer']);
+                console.log(html_card_voice_diabled);
+            }else{
+                if ((mediastream_detail)['video'] === true) {
+                    
+                }else{
+
+                }
+            }
+            console.log("stream2",stream);
+        })
+    })
 
 
 
 
     peer.on('connection', (conn) => {
 
-        console.log(conn,"connection");
-
-        conn.on('open',()=>{
-            console.log("user-connect first",conn);
-            conn.send({"user-connect":MY_UNIQUE_ID})
-
-        })
         conn.on('open', () => {
-            conn.send({"user-connect":MY_UNIQUE_ID})
+            console.log({"user-connect":MY_UNIQUE_ID});
         })
 
         conn.on('close',()=>{
-            console.log("close",conn['peer']);
+            console.log({"user-disconnect":conn['peer']});
+            // $.ajax({
+            //     type: "POST",
+            //     headers: {
+            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     },
+            //     url: path+'/member_disconnect',
+            //     data: {
+            //         _token : $('meta[name="csrf-token"]').attr('content'), 
+            //         username:USER_NAME,
+            //         hashtag:USER_HAHSTAG,
+            //         user_id:USER_ID,
+            //         user_token:USER_TOKEN,
+            //         my_id: USER_ID,
+            //         fr_id:conn['peer'],
+            //         room_uuid: ROOM_UUID,
+            //     },
+            //     dataType: "json",
+            // });
         })
 
         conn.on('data', (data) => {
@@ -82,8 +162,21 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get) {
         get_all_members(room_uuid,peer)
     }else{
         var Members = Members_get;
+        var connection_check = [];
+        var empty_voice = await make_empty_media_stream('voice');
+
         for (let i = 0; i < Members.length; i++) {
-            var member_id = Object.keys(Members[i])
+            var member_id = Object.keys(Members[i])[0]
+            var member_peer_id = Members[i][member_id];
+            connection_check[i] = 
+                {
+                    "member_id":member_id,
+                    "member_peer_id":member_peer_id,
+                    "connected":false,
+                }
+        }
+        for (let i = 0; i < Members.length; i++) {
+            var member_id = Object.keys(Members[i])[0]
             var member_peer_id = Members[i][member_id];
             var conn = peer.connect(member_peer_id,{metadata:{
                 connected_TO_uq_id:MY_UNIQUE_ID,
@@ -91,18 +184,44 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get) {
                 connected_TO_hashtag:USER_HAHSTAG,
                 connected_TO_id:USER_ID
             }});
+            var call = peer.call(member_peer_id, empty_voice , {metadata:{mediaStream:{voicechat:false,video:false,empty:true},call_detail:{userName:USER_NAME,userID:USER_ID,hashtag:USER_HAHSTAG,fr_peer:member_peer_id}}});
 
-            conn.on('close', () => {
+            console.log(call);
+            call.on('stream',(remoteStream)=>{
+                console.log("send call");
+            })
 
-                console.log({"user-disconnect":member_peer_id});
+            conn.on('open',()=>{
+                connection_check[i]['connected'] = true;
+                conn.on('close', () => {
+                    connection_check[i]['connected'] = false;
+                })
             })
         }
+        setTimeout(async ()=>{
+            remove_member_from_db_no_connection(connection_check,room_uuid);
+            // add_voice_call_to_anothers_peer(connection_check,room_uuid,peer,await get_voice_media_stream());
+
+        },100)
+    }
+}
+async function add_voice_call_to_anothers_peer(members,room_uuid,peer,voice_stream) {
+
+
+    for (let i = 0; i < members.length; i++) {
+        console.log(members);
+        if (members[i]['connected'] === true) {
+            var call = peer.call(members[i]['member_peer_id'], voice_stream,{metadata:{voicechat:true}});
+            console.log(call,members[i]['member_id'],members[i]['member_peer_id'],voice_stream);
+
+            call.on('stream', function(remoteStream) {
+                console.log('remoteStream',remoteStream);
+            });
+        }
+
     }
 
-
-
 }
-
 
 async function get_all_members(room_uuid,peer) {
     $.ajax({
@@ -127,6 +246,34 @@ async function get_all_members(room_uuid,peer) {
 
 }
 
+
+function remove_member_from_db_no_connection(members_info,room_uuid) {
+    for (let i = 0; i < members_info.length; i++) {
+        if (members_info[i]['connected'] === false) {
+            $.ajax({
+                type: "POST",
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: path+'/members_cannot_make_connection_to_member',
+                data: {
+                    _token : $('meta[name="csrf-token"]').attr('content'), 
+                    username:USER_NAME,
+                    hashtag:USER_HAHSTAG,
+                    user_id:USER_ID,
+                    user_token:USER_TOKEN,
+                    my_id: USER_ID,
+                    room_uuid: room_uuid,
+                    member_id: members_info[i]['member_id'],
+                    member_peer_id: members_info[i]['member_peer_id'],
+                    connected: members_info[i]['connected'],
+                }
+            });
+        
+        }
+        
+    }
+}
 
 
 
