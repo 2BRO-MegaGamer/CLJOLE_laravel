@@ -21,40 +21,47 @@ var bottom_video_member_style_active = 'box-shadow: 0px -10px 50px 3px rgb(255, 
 
 function make_card_for_voice_chat_card(userName,hashtag,fr_peer) {
     var webcam_or_voice_scroll_style = document.getElementById("webcam_or_voice_scroll_style");
-    console.log;
-    var style_of_card_voice_chat = `
-    <div class="card border-danger text-center mx-3 " style="margin-bottom: 5px;">
-        <div class="card-header p-1 " style="background: rgb(255, 145, 0);">
-            <div class="text-start">
-                `+ userName +`
-            </div>
-            <div class="text-end">
-                `+ hashtag +`
-            </div>
-            <div class="opacity-0 d-none" style="background: rgba(0, 0, 0, 0);">
-                <video id="`+fr_peer+`_voice_chat" width="0px" ></video>
-            </div>
-        </div>
-        <div class="card-body  p-0 m-0">
-            <div class="position-relative border-top border-primary  rounded-bottom" style="background: rgb(255, 145, 0);">
-                <div class=" text-center">
-                    <button class="btn p-0 m-0 text-danger"><i class="bi bi-mic-mute fs-4"></i></button>
-                </div>
-                <div class="position-absolute bottom-0 start-0">
-                    <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-    if (webcam_or_voice_scroll_style.innerHTML === "") {
-        webcam_or_voice_scroll_style.innerHTML = style_of_card_voice_chat;
-    }else{
-        webcam_or_voice_scroll_style.innerHTML = webcam_or_voice_scroll_style.innerHTML + "\n" + style_of_card_voice_chat;
+    console.log(webcam_or_voice_scroll_style.children);
+    var all_member_voice_div = webcam_or_voice_scroll_style.children;
+    var is_there_any_same_div =false;
+    for (let i = 0; i < all_member_voice_div.length; i++) {
+        if (all_member_voice_div[i].id === fr_peer+"_div_voice_chat") {
+            console.log("vojod");
+            is_there_any_same_div = true;
+        }
     }
-
-
-    // return style_of_card_voice_chat;
+    if (is_there_any_same_div === false) {
+        var style_of_card_voice_chat = `
+        <div id="`+fr_peer+`_div_voice_chat" class="card border-danger text-center mx-3 " style="margin-bottom: 5px;">
+            <div class="card-header p-1 " style="background: rgb(255, 145, 0);">
+                <div class="text-start">
+                    `+ userName +`
+                </div>
+                <div class="text-end">
+                    `+ hashtag +`
+                </div>
+                <div class="opacity-0 d-none" style="background: rgba(0, 0, 0, 0);">
+                    <video id="`+fr_peer+`_voice_chat" width="0px" ></video>
+                </div>
+            </div>
+            <div class="card-body  p-0 m-0">
+                <div class="position-relative border-top border-primary  rounded-bottom" style="background: rgb(255, 145, 0);">
+                    <div class=" text-center">
+                        <button class="btn p-0 m-0 text-danger"><i class="bi bi-mic-mute fs-4"></i></button>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0">
+                        <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        if (webcam_or_voice_scroll_style.innerHTML === "") {
+            webcam_or_voice_scroll_style.innerHTML = style_of_card_voice_chat;
+        }else{
+            webcam_or_voice_scroll_style.innerHTML = webcam_or_voice_scroll_style.innerHTML + "\n" + style_of_card_voice_chat;
+        }
+    }
 
 }
 

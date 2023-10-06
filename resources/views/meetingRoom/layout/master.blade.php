@@ -26,18 +26,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script>
-        const ROOM_UUID = "{{$roomUUID}}"
-        const ROOM_ID = "{{$roomID}}"
-        const USER_NAME = "{{auth()->user()->UserName}}"
-        const USER_HAHSTAG = "{{auth()->user()->hashtag}}"
-        const USER_ID = "{{auth()->id()}}"
-        const USER_TOKEN = "{{$user_token}}"
-        const IN_ROOM_NAME = "{{$my_custom_name}}"
-        const ROOM_Permission = "{{$Permission}}"
+        const ROOM_UUID = "{{$roomUUID}}";
+        const ROOM_ID = "{{$roomID}}";
+        const USER_NAME = "{{auth()->user()->UserName}}";
+        const USER_HAHSTAG = "{{auth()->user()->hashtag}}";
+        const USER_ID = "{{auth()->id()}}";
+        const USER_TOKEN = "{{$user_token}}";
+        const IN_ROOM_NAME = "{{$my_custom_name}}";
+        const ROOM_Permission = "{{$Permission}}";
         const MY_UNIQUE_ID = ""+ ROOM_UUID+'_'+USER_NAME+'-'+(USER_HAHSTAG.split('#'))[1]+'-'+USER_ID;
         const path = '{{$server_path}}';
         const duplicate_detect = "{{$duplicate}}";
         const MEMBERS_CONNECTED_DB = "{{$members_connected}}";
+        const HOST_NAME = "{{$members_connected}}";
+        const HOST_Hashtag = "{{$members_connected}}";
+        const HOST_id = "{{$members_connected}}";
+        const HOST_peer_id = "{{$members_connected}}";
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

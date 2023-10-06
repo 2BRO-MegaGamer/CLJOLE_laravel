@@ -83,8 +83,8 @@ function peer_connected(peer_get) {
         var mediastream_detail = (call.metadata)['mediaStream'];
         call.on("stream",stream=>{
             if ((mediastream_detail)['empty'] === true) {
-                var html_card_voice_diabled = make_card_for_voice_chat_card(call_detail['userName'],call_detail['hashtag'],call_detail['fr_peer']);
-                console.log(html_card_voice_diabled);
+                make_card_for_voice_chat_card(call_detail['userName'],call_detail['hashtag'],call_detail['fr_peer']);
+                
             }else{
                 if ((mediastream_detail)['video'] === true) {
                     
@@ -92,7 +92,7 @@ function peer_connected(peer_get) {
 
                 }
             }
-            console.log("stream2",stream);
+            console.log("stream2",call);
         })
     })
 
@@ -188,7 +188,8 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get) {
 
             console.log(call);
             call.on('stream',(remoteStream)=>{
-                console.log("send call");
+                make_card_for_voice_chat_card(conn.metadata['connected_TO_username'],conn.metadata['connected_TO_hashtag'],conn.metadata['connected_TO_uq_id']);
+                console.log("send call",conn);
             })
 
             conn.on('open',()=>{
