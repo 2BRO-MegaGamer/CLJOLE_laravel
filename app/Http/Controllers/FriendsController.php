@@ -125,12 +125,13 @@ class FriendsController extends Controller
       $error_detail = $this->duplicate_friend($request->friend_id);
       if ($error_detail == "") {
         if (count($friend_req_sends) != 0) {
-          if ($friend_req_sends[0]->friends_send == "") {
+          if ($friend_req_sends[0]->friends_send == null) {
             Friends::where('user_id', auth()->id())
             ->update(['friends_send' => ''. $request->friend_id .'']);
           }else{
+            $friends_req = $friend_req_sends[0]->friends_send . ','. $request->friend_id;
             Friends::where('user_id', auth()->id())
-            ->update(['friends_send' => $friend_req_sends[0]->friends_send . ','. $request->friend_id .'']);
+              ->update(['friends_send' => $friends_req]);
           }
   
   
@@ -147,15 +148,15 @@ class FriendsController extends Controller
     }
     
     function friend_gets_req($request){
-      $friend_req_get =Friends::where('user_id', auth()->id())->get('friends_get');
+      $friend_req_get =Friends::where('user_id', $request->friend_id)->get('friends_get');
       if (count($friend_req_get) != 0) {
-
-        if ($friend_req_get[0]->friends_get == "") {
+        if ($friend_req_get[0]->friends_get == null) {
           Friends::where('user_id', $request->friend_id)
-          ->update(['friends_get' => ''. auth()->id().'']);
+            ->update(['friends_get' => ''. auth()->id() .'']);
         }else{
+          $friends_req = $friend_req_get[0]->friends_get . ','. auth()->id();
           Friends::where('user_id', $request->friend_id)
-          ->update(['friends_get' => $friend_req_get[0]->friends_get . ','. $request->friend_id .'']);
+            ->update(['friends_get' => $friends_req]);
         }
       }
     }
@@ -281,7 +282,7 @@ class FriendsController extends Controller
           if ($return_data_for_db_send == '') {
             $return_data_for_db_send = $friend_id;
           }else{
-            $return_data_for_db_send += "," . $friend_id;
+            $return_data_for_db_send = $return_data_for_db_send . "," . $friend_id;
           }
         }
       }
@@ -367,7 +368,7 @@ class FriendsController extends Controller
           if ($return_data_for_db == '') {
             $return_data_for_db = $friend_id;
           }else{
-            $return_data_for_db += "," . $friend_id;
+            $return_data_for_db = $return_data_for_db . "," . $friend_id;
           }
         }
       }
@@ -392,7 +393,7 @@ class FriendsController extends Controller
           if ($return_data_for_db_sender == '') {
             $return_data_for_db_sender =(string) $friend_id;
           }else{
-            $return_data_for_db_sender += "," . $friend_id;
+            $return_data_for_db_sender = $return_data_for_db_sender . "," . $friend_id;
           }
         }
       }

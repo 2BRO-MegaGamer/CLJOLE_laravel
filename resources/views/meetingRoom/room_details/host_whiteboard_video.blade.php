@@ -29,11 +29,14 @@
         </div>
     </div>
 </div>
-<div class="row position-absolute bottom-0 start-50 translate-middle-x rounded w-50"  style="background: rgb(0, 147, 167)">
-    <button class="btn col"><i class="bi bi-camera-video fs-4"></i></button>
-    <button class="btn col"><i class="bi bi-mic fs-4"></i></button>
-    <button class="btn col"><i class="bi bi-hand-index fs-4"></i></button>
-
-
+<div class="row position-absolute bottom-0 start-50 translate-middle-x rounded w-50"  style="background: rgba(0, 0, 0, 0.267)">
+    <button class="btn col text-light"><i class="bi bi-camera-video fs-4"></i></button>
+    <button class="btn col text-light" id="use_mic_btn" mute="true"><i class="bi bi-mic fs-4"></i></button>
+    <button class="btn col text-light"><i class="bi bi-hand-index fs-4"></i></button>
 </div>
+
+
+
+
+
 <script src="/js/meetingRoom/room_detail/host_whiteboard_video.js"></script>

@@ -26,22 +26,30 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script>
-        const ROOM_UUID = "{{$roomUUID}}";
-        const ROOM_ID = "{{$roomID}}";
-        const USER_NAME = "{{auth()->user()->UserName}}";
-        const USER_HAHSTAG = "{{auth()->user()->hashtag}}";
-        const USER_ID = "{{auth()->id()}}";
-        const USER_TOKEN = "{{$user_token}}";
-        const IN_ROOM_NAME = "{{$my_custom_name}}";
-        const ROOM_Permission = "{{$Permission}}";
-        const MY_UNIQUE_ID = ""+ ROOM_UUID+'_'+USER_NAME+'-'+(USER_HAHSTAG.split('#'))[1]+'-'+USER_ID;
-        const path = '{{$server_path}}';
-        const duplicate_detect = "{{$duplicate}}";
-        const MEMBERS_CONNECTED_DB = "{{$members_connected}}";
-        const HOST_NAME = "{{$members_connected}}";
-        const HOST_Hashtag = "{{$members_connected}}";
-        const HOST_id = "{{$members_connected}}";
-        const HOST_peer_id = "{{$members_connected}}";
+        const ROOM_INFO ={
+            ROOM_UUID : "{{$roomUUID}}",
+            ROOM_ID: "{{$roomID}}",
+            ROOM_Permission: "{{$Permission}}",
+        };
+        const USER_INFO = {
+            USER_NAME: "{{auth()->user()->UserName}}",
+            USER_HASHTAG: "{{auth()->user()->hashtag}}",
+            USER_ID: "{{auth()->id()}}",
+            USER_TOKEN: "{{$user_token}}",
+            IN_ROOM_NAME: "{{$my_custom_name}}",
+            MY_UNIQUE_ID: ""+ "{{$roomUUID}}" +'_'+"{{auth()->user()->UserName}}"+'-'+(("{{auth()->user()->hashtag}}").split('#'))[1]+'-'+"{{auth()->id()}}",
+            duplicate_detect: "{{$duplicate}}",
+            MEMBERS_CONNECTED_DB: "{{$members_connected}}",
+        };
+        const HOST_INFO = {
+            HOST_NAME: "{{$HOST_userName}}",
+            HOST_HASHTAG: "{{$HOST_hashtag}}",
+            HOST_id: "{{$HOST_id}}",
+            HOST_peer_id: ""+ "{{$roomUUID}}" +'_'+"{{$HOST_userName}}"+'-'+(("{{$HOST_hashtag}}").split('#'))[1]+'-'+"{{$HOST_id}}",
+        };
+
+        const path ='{{$server_path}}';
+
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

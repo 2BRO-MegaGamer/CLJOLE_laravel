@@ -59,6 +59,7 @@ class MeetingRoomController extends Controller
                     $dublicate_detect = "true";
                 }
                 $room_type = $get_rooms[0]->type;
+                $host_details = ($this->get_host_information($roomID));
                 foreach ($info_user_inRoom as $column => $Bool_ids) {
                     if ($Bool_ids  === true) {
                         $Permission = '';
@@ -74,35 +75,56 @@ class MeetingRoomController extends Controller
                                 break;
 
                         }
+
                         $this->make_user_visible_in_Member_list($roomID,$get_rooms);
-                        return view('meetingRoom.Room',['my_custom_name'=>$request->my_custom_name,'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,'Permission'=>$Permission,'duplicate'=>$dublicate_detect]);
-                    }else{
-                        if ($info_user_inRoom['host']  === false) {
-                            if ($room_type === 'public') {
-                                $this->make_user_visible_in_Member_list($roomID,$get_rooms);
-                                return view('meetingRoom.Room',['my_custom_name'=>$request->my_custom_name,'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,'Permission'=>'Member','duplicate'=>$dublicate_detect]);
-                            }else{
-                                if (!($info_user_inRoom['accept_m'] === true)) {
-                                    $message = '';
-                                    if ($info_user_inRoom['wait_to_accept'] != true) {
-                                        $this->make_user_visible_in_wait_list($roomID,$get_rooms);
-                                        $message = 'You are not a member of this group. Your request has been sent to the administrators';
-                                    }else{
-                                        $message = 'Your membership request has been sent,pls wait';
-                                    }
-                                    return redirect('/mR/joinTo/'.$roomID)->with(['message'=>[false,$message,$roomID]]);
-                                }
-                            }
-                        }
+                        return view('meetingRoom.Room',[
+                            'my_custom_name'=>$request->my_custom_name,
+                            'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,
+                            'Permission'=>$Permission,
+                            'duplicate'=>$dublicate_detect,
+                            "HOST_userName"=> $host_details[0],
+                            "HOST_hashtag"=> $host_details[1],
+                            "HOST_id"=> $host_details[2],
+                        ]);
                     }
+                }
+                if ($room_type === 'public') {
+                    $this->make_user_visible_in_Member_list($roomID,$get_rooms);
+                    return view('meetingRoom.Room',[
+                        'my_custom_name'=>$request->my_custom_name,
+                        'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,
+                        'Permission'=>'Member',
+                        'duplicate'=>$dublicate_detect,
+                        "HOST_userName"=> $host_details[0],
+                        "HOST_hashtag"=> $host_details[1],
+                        "HOST_id"=> $host_details[2],
+                    ]);
+                }else{
+                    $message = '';
+                    if ($info_user_inRoom['wait_to_accept'] === true) {
+                        $message = 'Your membership request has been sent,pls wait';
+
+                    }else{
+                        
+                        $this->make_user_visible_in_wait_list($roomID);
+                        $message = 'You are not a member of this group. Your request has been sent to the administrators';
+                    }
+                    return redirect('/mR/joinTo/'.$roomID)->with(['message'=>[false,$message,$roomID]]);
                 }
             }
         }
     }
 
+    public function get_host_information($roomUUID){
+        $room_creator_id =  Rooms::where('room_uuid',$roomUUID)->get('creator_id')[0]->creator_id;
+        $host_information = User::where('id', $room_creator_id)->get(['UserName','hashtag'])[0];
+        return [$host_information['UserName'],$host_information['hashtag'],$room_creator_id];
+    }
 
-    public function make_user_visible_in_wait_list($room_id,$room_info){
-        if (is_string($room_info[0]->wait_to_accept)) {
+
+    public function make_user_visible_in_wait_list($room_id){
+        $room_info = Rooms::where('room_uuid',$room_id)->get();
+        if (!($room_info[0]->wait_to_accept == null)) {
             $string_ids = $room_info[0]->wait_to_accept . "," . auth()->id();
         }else{
             $string_ids = (string) auth()->id();
@@ -146,8 +168,7 @@ class MeetingRoomController extends Controller
         }
     }
     public function check_user_status_in_room($roomID){
-
-        $host_check = $this->am_i_host();
+        $host_check = $this->am_i_host($roomID[0]);
         $moderator_check = $this->am_i_in_list($roomID,array_keys($roomID[0]->toArray())[5]);
         $accept_m_check = $this->am_i_in_list($roomID,array_keys($roomID[0]->toArray())[7]);
         $wait_to_accept_check = $this->am_i_in_list($roomID,array_keys($roomID[0]->toArray())[6]);
@@ -156,9 +177,8 @@ class MeetingRoomController extends Controller
     }
 
 
-    public function am_i_host(){
-        $am_i_host = Rooms::where('creator_id',auth()->id())->get('id');
-        if (count($am_i_host) != 0) {
+    public function am_i_host($roomInfo){
+        if (($roomInfo->creator_id) == auth()->id()) {
             return true;
         }else{
             return false;
@@ -257,7 +277,6 @@ class MeetingRoomController extends Controller
                     }
                 }
             }
-
             return($peer_ids);
             
         }else{

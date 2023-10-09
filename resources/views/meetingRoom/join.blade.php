@@ -12,7 +12,7 @@
         <form method="post" id="form_join_req" action="/mR/Room/{{$roomID}}">
             @csrf
             @if (isset($message))
-            <div class="text-danger text-center">
+            <div class="text-warning fs-3 text-center">
                 <p>{{$message}}</p>
             </div>
             @endif
@@ -21,7 +21,7 @@
                 <label>your Name</label>
             </div>
             <div class="form-floating">
-                <input type="text" id="room_uuid" name="room_uuid" onkeyup="change_room_id()" class="form-control rounded-0 text-center opacity-50" value="{{$roomID}}" autocomplete="off" required>
+                <input type="text" id="room_uuid" name="room_uuid" onchange="change_room_id()" onkeyup="change_room_id()" class="form-control rounded-0 text-center opacity-50" value="{{$roomID}}" autocomplete="off" required>
                 <label>Room Id</label>
             </div>
             <button class="btn btn-primary w-100 py-2 rounded-0 rounded-bottom " type="submit" >Join Room</button>

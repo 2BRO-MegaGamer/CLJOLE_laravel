@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\getcilentIPController;
 use App\Http\Controllers\UserIp;
-use App\Models\Friends;
 use App\Models\Hashtag;
-use App\Models\Profile_img_bio;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,7 +56,6 @@ class RegisterController extends Controller
             'firstName' => ['required', 'string', 'max:255'],
             'lastName' => ['required', 'string', 'max:255'],
             'UserName' => ['required', 'string',  'max:255'],
-            'hashtag',
             'gender' => 'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -137,8 +134,9 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data,string $ip)
+    protected function create(array $data)
     {
+        $ip = (new getcilentIPController)->getClientIps();
         $hashtag = $this->hashtag_generator($data['UserName']);
         return User::create([
             'firstName' => $data['firstName'],
