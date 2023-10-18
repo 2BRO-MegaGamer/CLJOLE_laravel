@@ -46,7 +46,7 @@ class MeetingRoomController extends Controller
     }
     public function genarate_room(Request $request,string $roomID){
         if ($request->isMethod('post') === false) {
-            return redirect('/mR/joinTo/'.$roomID)->with(['message'=>[false,'An error occurred. Please try again',$roomID]]);
+            return redirect('/mR/joinTo/'.$roomID)->with(['message'=>[false,'Click Join Room, if u dont want to change your name',$roomID]]);
         }else{
             $get_rooms = Rooms::where('room_uuid',$roomID)->get();
             if (count($get_rooms) == 0) {
@@ -73,19 +73,22 @@ class MeetingRoomController extends Controller
                             case 'accept_m':
                                 $Permission = 'Member';
                                 break;
-
+                            case 'wait_to_accept':
+                                $Permission = 'NULL';
+                                break;
                         }
-
-                        $this->make_user_visible_in_Member_list($roomID,$get_rooms);
-                        return view('meetingRoom.Room',[
-                            'my_custom_name'=>$request->my_custom_name,
-                            'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,
-                            'Permission'=>$Permission,
-                            'duplicate'=>$dublicate_detect,
-                            "HOST_userName"=> $host_details[0],
-                            "HOST_hashtag"=> $host_details[1],
-                            "HOST_id"=> $host_details[2],
-                        ]);
+                        if ($Permission !== 'NULL') {
+                            $this->make_user_visible_in_Member_list($roomID,$get_rooms);
+                            return view('meetingRoom.Room',[
+                                'my_custom_name'=>$request->my_custom_name,
+                                'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,
+                                'Permission'=>$Permission,
+                                'duplicate'=>$dublicate_detect,
+                                "HOST_userName"=> $host_details[0],
+                                "HOST_hashtag"=> $host_details[1],
+                                "HOST_id"=> $host_details[2],
+                            ]);
+                        }
                     }
                 }
                 if ($room_type === 'public') {
@@ -103,9 +106,7 @@ class MeetingRoomController extends Controller
                     $message = '';
                     if ($info_user_inRoom['wait_to_accept'] === true) {
                         $message = 'Your membership request has been sent,pls wait';
-
                     }else{
-                        
                         $this->make_user_visible_in_wait_list($roomID);
                         $message = 'You are not a member of this group. Your request has been sent to the administrators';
                     }

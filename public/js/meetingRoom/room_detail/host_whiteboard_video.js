@@ -55,19 +55,13 @@ use_mic_btn.addEventListener("click",()=>{
 
 
 async function user_want_to_use_mic(peer) {
-    var stream = await get_media_stream(false,true);
-    console.log(stream,"ssssssssssssssss");
+    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    await getUserMedia({audio: true}, function(stream) {
+        change_media_shar_for_peer(peer,stream);
+    }, function(err) {
+        console.log('Failed to get local stream' ,err);
+    });
     // peer_connected(peer,stream);
 }
 
 
-async function get_media_stream(video,voice) {
-
-    navigator.mediaDevices.getUserMedia({video: video,audio: voice}, function(stream) {
-        console.log(stream);
-        return stream;
-    }, function(err) {
-            console.log('Failed to get local stream' ,err);
-    })
-
-}

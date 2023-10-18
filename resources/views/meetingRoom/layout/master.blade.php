@@ -15,9 +15,14 @@
                     $members_connected = $members_get[$i];
                 }else {
                     $members_connected = $members_connected .",". $members_get[$i];
-                    
                 }
             }
+        }
+        $am_i_host;
+        if ($Permission === "HOST") {
+            $am_i_host = "true";
+        }else {
+            $am_i_host = "false";
         }
     @endphp
 <head>
@@ -40,6 +45,7 @@
             MY_UNIQUE_ID: ""+ "{{$roomUUID}}" +'_'+"{{auth()->user()->UserName}}"+'-'+(("{{auth()->user()->hashtag}}").split('#'))[1]+'-'+"{{auth()->id()}}",
             duplicate_detect: "{{$duplicate}}",
             MEMBERS_CONNECTED_DB: "{{$members_connected}}",
+            AM_I_HOST: "{{$am_i_host}}"
         };
         const HOST_INFO = {
             HOST_NAME: "{{$HOST_userName}}",

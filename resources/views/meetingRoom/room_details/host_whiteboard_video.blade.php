@@ -35,8 +35,4 @@
     <button class="btn col text-light"><i class="bi bi-hand-index fs-4"></i></button>
 </div>
 
-
-
-
-
 <script src="/js/meetingRoom/room_detail/host_whiteboard_video.js"></script>

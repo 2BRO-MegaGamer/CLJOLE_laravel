@@ -17,31 +17,30 @@ var bottom_video_member_style_active = 'box-shadow: 0px -10px 50px 3px rgb(255, 
 //     }
 // })
 function edit_host_voice_card() {
-    var HOST_userName_div = document.getElementById("HOST_userName_div");
-    var HOST_hashtag_div = document.getElementById("HOST_hashtag_div");
-    HOST_userName_div.innerText = HOST_INFO.HOST_NAME;
-    HOST_hashtag_div.innerText = HOST_INFO.HOST_HASHTAG;
+    var HOST_userName_div_voice = document.getElementById("HOST_userName_div_voice");
+    var HOST_hashtag_div_voice = document.getElementById("HOST_hashtag_div_voice");
+    var HOST_userName_div_video = document.getElementById("HOST_userName_div_video");
+    var HOST_hashtag_div_video = document.getElementById("HOST_hashtag_div_video");
+    HOST_userName_div_voice.innerText = HOST_INFO.HOST_NAME;
+    HOST_hashtag_div_voice.innerText = HOST_INFO.HOST_HASHTAG;
+    HOST_userName_div_video.innerText = HOST_INFO.HOST_NAME;
+    HOST_hashtag_div_video.innerText = HOST_INFO.HOST_HASHTAG;
 }
 edit_host_voice_card();
 
 function make_card_for_voice_chat_card(call_info,HOST) {
-    console.log(call_info);
     var call_recipient = call_info.call_recipient;
     var call_sender = call_info.call_sender;
     if (call_recipient.userName == HOST.HOST_NAME && call_recipient.hashtag == HOST.HOST_HASHTAG && call_recipient.userID == HOST.HOST_id) {
-        console.log("call_recipient HOST");
         HTML_appear_card(call_sender.userName,call_sender.hashtag,call_sender.peer_id);
 
     }
     if (call_sender.userName == HOST.HOST_NAME && call_sender.hashtag == HOST.HOST_HASHTAG && call_sender.userID == HOST.HOST_id) {
-        console.log("call_sender HOST");
         HTML_appear_card(call_recipient.userName,call_recipient.hashtag,call_recipient.peer_id);
     }
     if (!(call_sender.userName == HOST.HOST_NAME && call_sender.hashtag == HOST.HOST_HASHTAG && call_sender.userID == HOST.HOST_id) && !(call_recipient.userName == HOST.HOST_NAME && call_recipient.hashtag == HOST.HOST_HASHTAG && call_recipient.userID == HOST.HOST_id)) {
-        console.log("NO one HOST");
         HTML_appear_card(call_sender.userName,call_sender.hashtag,call_sender.peer_id);
         HTML_appear_card(call_recipient.userName,call_recipient.hashtag,call_recipient.peer_id);
-        
     }
     edit_host_voice_card();
 
@@ -66,22 +65,33 @@ function make_card_for_voice_chat_card(call_info,HOST) {
         var all_member_voice_div = webcam_or_voice_scroll_style.children;
         var is_there_any_same_div =false;
         for (let i = 0; i < all_member_voice_div.length; i++) {
-            if (all_member_voice_div[i].id === peer_id+"_div_voice_chat_card") {
+            if (all_member_voice_div[i].id === peer_id+"_div_voice_video_card") {
                 is_there_any_same_div = true;
             }
         }
         if (is_there_any_same_div === false) {
             var style_of_card_voice_chat = `
-            <div id="`+peer_id+`_div_voice_chat_card" class="card border-danger text-center mx-3 " style="margin-bottom: 5px;">
+            <div id="`+peer_id+`_div_voice_video_card" class="card border-danger text-center mx-3 " style="margin-bottom: 5px;">
                 <div class="card-header p-1 " style="background: rgb(255, 145, 0);">
-                    <div class="text-start">
+                    <div class="text-start" id="`+peer_id+`_userName_div_voice">
                         `+ userName +`
                     </div>
-                    <div class="text-end">
+                    <div class="text-end" id="`+peer_id+`_hashtag_div_voice">
                         `+ hashtag +`
                     </div>
                     <div class="opacity-0 d-none" style="background: rgba(0, 0, 0, 0);">
                         <video id="`+peer_id+`_voice_chat" width="0px" muted></video>
+                    </div>
+                </div>
+                <div class="w-100  position-relative d-none">
+                    <div class="h-100">
+                        <div class="position-absolute text-start w-75 top-0 start-0">
+                            <div class="opacity-75 text text-truncate" id="`+peer_id+`_userName_div_video">`+ userName +`</div>
+                        </div>
+                        <div class="position-absolute text-end w-25 top-0 end-0">
+                            <div class="opacity-75" id="`+peer_id+`_hashtag_div_video">`+ hashtag +`</div>
+                        </div>
+                        <video id="`+peer_id+`_video_tag" class="w-100 h-100" style="background: rgba(0, 0, 0, 0);"></video>
                     </div>
                 </div>
                 <div class="card-body  p-0 m-0">
@@ -103,22 +113,16 @@ function make_card_for_voice_chat_card(call_info,HOST) {
             }
         }
     }
-
-
-
-
-
-
 }
 
 
 function mute_this_person(person,peer_id) {
     var id_for_voice_element;
 
-    if (peer_id === "HOST_voice_chat_video") {
-        id_for_voice_element = "HOST_voice_chat_video";
+    if (peer_id === "HOST_voice_chat_audio_tag") {
+        id_for_voice_element = "HOST_voice_chat_audio_tag";
     }else{
-        id_for_voice_element = peer_id+"_voice_chat";
+        id_for_voice_element = peer_id+"_voice_chat_audio_tag";
     }
 
     if (person.getAttribute('mute') == "true") {
