@@ -164,36 +164,93 @@ function peer_connected(peer_get,media_option) {
     });
 }
 function change_detail_for_member(m_peer_id,mediaStream,mediastream_detail) {
-    console.log(m_peer_id,mediaStream,mediastream_detail);
-    var status_for_webcam_or_voice = {
-        "if_empty":{
-            "btn_voice" : ["btn p-0 m-0 text-danger","disabled"],
-            "video_div_tag" : "w-100  position-relative d-none",
-            "voice_div_tag" : "card-header p-1"
-        },
-        "if_voice":{
-            "btn_voice" : ["btn p-0 m-0 text-success",""],
-            "video_div_tag" : "w-100  position-relative d-none",
-            "voice_div_tag" : "card-header p-1"
-        },
-        "if_video":{
-            "btn_voice" : ["btn p-0 m-0 text-success d-none",""],
-            "video_div_tag" : "w-100  position-relative",
-            "voice_div_tag" : "card-header p-1  d-none"
-        },
+
+    if (m_peer_id === HOST_INFO.HOST_peer_id) {
+        m_peer_id = "HOST";
     }
-    if (m_peer_id === USER_INFO.MY_UNIQUE_ID) {
-        console.log("MY _INFOOOOOOOOOOOOO");
-    }else{
-        console.log("OTHER _INFOOOOOOOOOOOOO");
-    }
-    if ((mediastream_detail)['empty'] === true) {
-                
-    }else{
-        if ((mediastream_detail)['video'] === true) {
+    var media_in_use =  make_front_change(mediastream_detail,m_peer_id);
+    make_back_src_change(media_in_use,m_peer_id,mediaStream)
+    
+    function make_front_change(media_option,m_peer_id) {
+
+        var status_for_webcam_or_voice = {
+            if_empty:{
+                btn_voice : ["btn p-0 m-0 text-danger","disabled"],
+                video_div_tag : "w-100  position-relative d-none",
+                voice_div_tag : "card-header p-1",
+                voice_icon : "bi bi-mic-mute fs-4",
+            },
+            if_voice:{
+                btn_voice : ["btn p-0 m-0 text-success",""],
+                video_div_tag : "w-100  position-relative d-none",
+                voice_div_tag : "card-header p-1",
+                voice_icon : "bi bi-mic fs-4",
+            },
+            if_video:{
+                btn_voice : ["btn p-0 m-0 text-success d-none","disabled"],
+                video_div_tag : "w-100  position-relative",
+                voice_div_tag : "card-header p-1  d-none",
+                voice_icon : "bi bi-mic-mute fs-4",
+
+            },
+        }
+        var key_media = Object.keys(media_option);
+        var media_in_use;
+        for (let i = 0; i < key_media.length; i++) {
+            if (media_option[key_media[i]] === true) {
+                media_in_use = key_media[i];
+            }
             
-        }else{
-            console.log("fr_voice");
+        }
+        let voice_div = document.getElementById(m_peer_id+"_voice_div");
+        let video_div = document.getElementById(m_peer_id+"_video_div");
+        let voice_btn_div = document.getElementById(m_peer_id+"_voice_btn_div");
+        let voice_btn_tag = voice_btn_div.children[0];
+        let voice_btn_icon = voice_btn_tag.children[0];
+        switch (media_in_use) {
+            case "voice":
+                console.log("voice");
+                voice_div.setAttribute("class",status_for_webcam_or_voice.if_voice['voice_div_tag'])
+                video_div.setAttribute("class",status_for_webcam_or_voice.if_voice['video_div_tag'])
+                voice_btn_tag.removeAttribute("disabled")
+                voice_btn_tag.setAttribute("class",(status_for_webcam_or_voice.if_voice['btn_voice'])[0])
+                voice_btn_icon.setAttribute("class",status_for_webcam_or_voice.if_voice['voice_icon'])
+                break;
+            case "video":
+                console.log("video");
+                voice_div.setAttribute("class",status_for_webcam_or_voice.if_video['voice_div_tag'])
+                video_div.setAttribute("class",status_for_webcam_or_voice.if_video['video_div_tag'])
+                voice_btn_tag.setAttribute((status_for_webcam_or_voice.if_video['btn_voice'])[1],"")
+                voice_btn_tag.setAttribute("class",(status_for_webcam_or_voice.if_video['btn_voice'])[0])
+                voice_btn_icon.setAttribute("class",status_for_webcam_or_voice.if_video['voice_icon'])
+                break;
+            case "empty":
+                voice_div.setAttribute("class",status_for_webcam_or_voice.if_empty['voice_div_tag'])
+                video_div.setAttribute("class",status_for_webcam_or_voice.if_empty['video_div_tag'])
+                voice_btn_tag.setAttribute((status_for_webcam_or_voice.if_empty['btn_voice'])[1],"")
+                voice_btn_tag.setAttribute("class",(status_for_webcam_or_voice.if_empty['btn_voice'])[0])
+                voice_btn_icon.setAttribute("class",status_for_webcam_or_voice.if_empty['voice_icon'])
+                break;
+        }
+        return media_in_use;
+    }
+    function make_back_src_change(media_option,m_peer_id,mediaStream) {
+        var video_tag = document.getElementById(m_peer_id + "_video_tag");
+        var voice_tag = document.getElementById(m_peer_id + "_voice_tag");
+        switch (media_option) {
+            case "voice":
+                console.log("voice ANJAM ", mediaStream);
+                voice_tag.srcObject = mediaStream;
+                
+                voice_tag.onloadedmetadata =()=>{;voice_tag.play();voice_tag.removeAttribute("muted");console.log("played_with_sound");};
+                break;
+            case "video":
+
+                console.log("video");
+                break;
+            case "empty":
+
+                break;
         }
     }
 }

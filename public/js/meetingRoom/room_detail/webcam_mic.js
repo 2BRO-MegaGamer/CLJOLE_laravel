@@ -72,7 +72,7 @@ function make_card_for_voice_chat_card(call_info,HOST) {
         if (is_there_any_same_div === false) {
             var style_of_card_voice_chat = `
             <div id="`+peer_id+`_div_voice_video_card" class="card border-danger text-center mx-3 " style="margin-bottom: 5px;">
-                <div class="card-header p-1 " style="background: rgb(255, 145, 0);">
+                <div id="`+peer_id+`_voice_div" class="card-header p-1 " style="background: rgb(255, 145, 0);">
                     <div class="text-start" id="`+peer_id+`_userName_div_voice">
                         `+ userName +`
                     </div>
@@ -80,10 +80,10 @@ function make_card_for_voice_chat_card(call_info,HOST) {
                         `+ hashtag +`
                     </div>
                     <div class="opacity-0 d-none" style="background: rgba(0, 0, 0, 0);">
-                        <video id="`+peer_id+`_voice_chat" width="0px" muted></video>
+                        <video id="`+peer_id+`_voice_tag" width="0px" muted></video>
                     </div>
                 </div>
-                <div class="w-100  position-relative d-none">
+                <div id="`+peer_id+`_video_div" class="w-100  position-relative d-none">
                     <div class="h-100">
                         <div class="position-absolute text-start w-75 top-0 start-0">
                             <div class="opacity-75 text text-truncate" id="`+peer_id+`_userName_div_video">`+ userName +`</div>
@@ -91,12 +91,12 @@ function make_card_for_voice_chat_card(call_info,HOST) {
                         <div class="position-absolute text-end w-25 top-0 end-0">
                             <div class="opacity-75" id="`+peer_id+`_hashtag_div_video">`+ hashtag +`</div>
                         </div>
-                        <video id="`+peer_id+`_video_tag" class="w-100 h-100" style="background: rgba(0, 0, 0, 0);"></video>
+                        <video id="`+peer_id+`_video_tag" class="w-100 h-100" style="background: rgba(0, 0, 0, 0);" muted></video>
                     </div>
                 </div>
                 <div class="card-body  p-0 m-0">
                     <div class="position-relative border-top border-primary  rounded-bottom" style="background: rgb(255, 145, 0);">
-                        <div class=" text-center">
+                        <div id="`+peer_id+`_voice_btn_div" class=" text-center">
                             <button onclick="mute_this_person(this,"`+peer_id+`")" muted="true" class="btn p-0 m-0 text-danger" disabled><i class="bi bi-mic-mute fs-4"></i></button>
                         </div>
                         <div class="position-absolute bottom-0 start-0">
