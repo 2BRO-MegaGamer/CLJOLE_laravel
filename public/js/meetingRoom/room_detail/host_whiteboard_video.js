@@ -38,30 +38,6 @@ host_video_div.addEventListener("mouseover",(e)=>{
 
 
 
-var use_mic_btn = document.getElementById("use_mic_btn");
 
-use_mic_btn.addEventListener("click",()=>{
-    if (use_mic_btn.getAttribute('mute') == "true") {
-        user_want_to_use_mic(public_peer);
-        // var btn_unmuted = ["btn col text-light","bi bi-mic fs-4"];
-        // person.setAttribute('mute',"false");
-        // person.setAttribute('class',btn_unmuted[0]);
-        // document.getElementById(id_for_voice_element).removeAttribute("muted");
-        // (person.children)[0].setAttribute('class',btn_unmuted[1])
-    }else{
-
-    }
-})
-
-
-async function user_want_to_use_mic(peer) {
-    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    await getUserMedia({audio: true}, function(stream) {
-        change_media_shar_for_peer(peer,stream);
-    }, function(err) {
-        console.log('Failed to get local stream' ,err);
-    });
-    // peer_connected(peer,stream);
-}
 
 

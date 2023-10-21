@@ -97,7 +97,7 @@ function make_card_for_voice_chat_card(call_info,HOST) {
                 <div class="card-body  p-0 m-0">
                     <div class="position-relative border-top border-primary  rounded-bottom" style="background: rgb(255, 145, 0);">
                         <div id="`+peer_id+`_voice_btn_div" class=" text-center">
-                            <button onclick="mute_this_person(this,"`+peer_id+`")" muted="true" class="btn p-0 m-0 text-danger" disabled><i class="bi bi-mic-mute fs-4"></i></button>
+                            <button onclick="mute_this_person(this,'`+peer_id+`')" muted="true" class="btn p-0 m-0 text-danger" disabled><i class="bi bi-mic-mute fs-4"></i></button>
                         </div>
                         <div class="position-absolute bottom-0 start-0">
                             <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>

@@ -1,6 +1,50 @@
 
 var peer_first = peer_connection(USER_INFO.MY_UNIQUE_ID,null);
-let local_stream = [[false,false,true] , undefined];
+let local_stream = [{
+    voice : false,
+    video : false,
+    empty : true,
+} , undefined];
+let save_media_for_sends_calls={};
+
+
+
+
+var use_mic_btn = document.getElementById("use_mic_btn");
+
+use_mic_btn.addEventListener("click",()=>{
+    if (use_mic_btn.getAttribute('mute') == "true") {
+        user_want_to_use_mic(public_peer);
+        // var btn_unmuted = ["btn col text-light","bi bi-mic fs-4"];
+        // person.setAttribute('mute',"false");
+        // person.setAttribute('class',btn_unmuted[0]);
+        // document.getElementById(id_for_voice_element).removeAttribute("muted");
+        // (person.children)[0].setAttribute('class',btn_unmuted[1])
+    }else{
+
+    }
+})
+
+
+async function user_want_to_use_mic(peer) {
+    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    await getUserMedia({audio: true}, function(stream) {
+        local_stream[0] = {
+            voice : true,
+            video : false,
+            empty : false,
+        }
+        local_stream[1] = stream;
+        change_media_shar_for_peer(peer,stream);
+    }, function(err) {
+        console.log('Failed to get local stream' ,err);
+    });
+    // peer_connected(peer,stream);
+}
+
+
+
+
 function make_empty_media_stream(voice_or_video) {
 
     const createEmptyAudioTrack = () => {
@@ -33,6 +77,12 @@ function make_empty_media_stream(voice_or_video) {
 async function get_voice_media_stream() {
     var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
     await getUserMedia({ audio: true}, function(stream) {
+        local_stream[0] = {
+            voice : true,
+            video : false,
+            empty : false,
+        }
+        local_stream[1] = stream;
         return stream;
     }, function(err) {
         console.log('Failed to get local stream' ,err);
@@ -85,7 +135,7 @@ function peer_connected(peer_get,media_option) {
         call.answer(local_stream[1]);
         call.on("stream",stream=>{
             make_card_for_voice_chat_card({call_recipient,call_sender},HOST_INFO);
-            send_our_meta_data_for_sender(local_stream,call_sender,conn);
+            send_our_meta_data_for_sender(local_stream,call_recipient,conn);
             change_detail_for_member(call_sender.peer_id,stream,mediastream_detail);
             // if ((mediastream_detail)['empty'] === true) {
                 
@@ -157,22 +207,23 @@ function peer_connected(peer_get,media_option) {
 
                     break;
                 case 'call-recipient-mediaStream':
-                    console.log("call-recipient-mediaStream",conn);
+                    console.log("call-recipient-mediaStream",data);
+                    var media_recipient = ((data['call-recipient-mediaStream']).media_recipient)
+                    change_detail_for_member(media_recipient.peer_id,save_media_for_sends_calls[media_recipient.peer_id].media_stream,(data['call-recipient-mediaStream']).media_status)
                     break;
             }
         });
     });
 }
 function change_detail_for_member(m_peer_id,mediaStream,mediastream_detail) {
+    console.log(m_peer_id,mediaStream,mediastream_detail,"change_detail_for_member");
 
     if (m_peer_id === HOST_INFO.HOST_peer_id) {
         m_peer_id = "HOST";
     }
-    var media_in_use =  make_front_change(mediastream_detail,m_peer_id);
-    make_back_src_change(media_in_use,m_peer_id,mediaStream)
+    make_front_change(mediastream_detail,m_peer_id);
     
     function make_front_change(media_option,m_peer_id) {
-
         var status_for_webcam_or_voice = {
             if_empty:{
                 btn_voice : ["btn p-0 m-0 text-danger","disabled"],
@@ -195,6 +246,7 @@ function change_detail_for_member(m_peer_id,mediaStream,mediastream_detail) {
             },
         }
         var key_media = Object.keys(media_option);
+
         var media_in_use;
         for (let i = 0; i < key_media.length; i++) {
             if (media_option[key_media[i]] === true) {
@@ -202,6 +254,7 @@ function change_detail_for_member(m_peer_id,mediaStream,mediastream_detail) {
             }
             
         }
+
         let voice_div = document.getElementById(m_peer_id+"_voice_div");
         let video_div = document.getElementById(m_peer_id+"_video_div");
         let voice_btn_div = document.getElementById(m_peer_id+"_voice_btn_div");
@@ -232,17 +285,21 @@ function change_detail_for_member(m_peer_id,mediaStream,mediastream_detail) {
                 voice_btn_icon.setAttribute("class",status_for_webcam_or_voice.if_empty['voice_icon'])
                 break;
         }
-        return media_in_use;
+        make_back_src_change(media_in_use,m_peer_id,mediaStream);
     }
     function make_back_src_change(media_option,m_peer_id,mediaStream) {
+        console.log(media_option,"make_back_src_change");
         var video_tag = document.getElementById(m_peer_id + "_video_tag");
         var voice_tag = document.getElementById(m_peer_id + "_voice_tag");
         switch (media_option) {
             case "voice":
-                console.log("voice ANJAM ", mediaStream);
                 voice_tag.srcObject = mediaStream;
-                
-                voice_tag.onloadedmetadata =()=>{;voice_tag.play();voice_tag.removeAttribute("muted");console.log("played_with_sound");};
+                voice_tag.onloadedmetadata =()=>{voice_tag.muted = true;voice_tag.play();};
+                console.log("voice ANJAM ", mediaStream , voice_tag);
+                setTimeout(()=>{
+                    voice_tag.muted = false;
+                    console.log("played_with_sound",voice_tag);
+                },1000)
                 break;
             case "video":
 
@@ -256,11 +313,12 @@ function change_detail_for_member(m_peer_id,mediaStream,mediastream_detail) {
 }
 
 
-function send_our_meta_data_for_sender(media,call_sender,conn) {
+function send_our_meta_data_for_sender(media,call_recipient,conn) {
+
     conn.on('open', () => {
         conn.send({"call-recipient-mediaStream":{
             media_status:media[0],
-            media_recipient:call_sender,
+            media_recipient:call_recipient,
         }})
     })
 }
@@ -379,6 +437,7 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get,media
                 var call_recipient = call_detail.call_recipient;
                 var call_sender = call_detail.call_sender;
                 var mediastream_detail = (((call[i].metadata).call_detail).call_sender).mediaStream;
+                save_media_for_sends_calls[call_recipient.peer_id] = {media_stream : remoteStream};
                 make_card_for_voice_chat_card({call_recipient,call_sender},HOST_INFO);
                 change_detail_for_member(call_sender.peer_id,remoteStream,mediastream_detail);
 
