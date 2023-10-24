@@ -4,11 +4,11 @@
 </div>
 
 
-<div id="chat_message_div" class="h-100 border text-center" style="background:rgb(80, 80, 80);display:none;">
-    <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 85%;">
-        <div class="d-block">
+<div id="chat_message_div" class="h-100 border text-center position-relative" style="background:rgb(80, 80, 80);display:none;">
+    <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 80%;">
+        <div class="d-block" id="message_save_in_room">
             @for ($i = 0; $i < 50; $i++)
-            <div class="card my-2 border-danger position-relative">
+            {{-- <div class="card my-2 border-danger position-relative">
                 <div class="card-header border-bottom border-warning" style="background: #C496FE">
                     userName:
                 </div>
@@ -18,11 +18,11 @@
                 <div class="position-absolute start-0 bottom-0">
                     <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>
                 </div>
-            </div>
+            </div> --}}
             @endfor
         </div>
     </div>
-    <div style="height: 15%;">
+    <div class="position-absolute bottom-0 w-100" style="height: 20%;">
         <div class="h-100">
             <div class="form-floating" style="height: 68%">
                 <textarea id="textarea_for_message_in_room" class="form-control h-100 rounded-0" placeholder="Leave a comment here"  style="resize: none;"></textarea>

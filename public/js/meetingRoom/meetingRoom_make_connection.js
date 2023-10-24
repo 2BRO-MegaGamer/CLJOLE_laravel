@@ -150,6 +150,9 @@ function peer_connected(peer_get,media_option) {
         conn.on('close', () => {
 
         })
+        conn.on('open', (id) => {
+            dataConnection_peer_members[call['peer']] = conn;
+        })
         
         var call_detail = (call.metadata)['call_detail'];
         var call_recipient = call_detail.call_recipient;
@@ -239,6 +242,9 @@ function peer_connected(peer_get,media_option) {
                     var media_recipient = ((data['call-recipient-mediaStream']).media_recipient)
                     change_detail_for_member(media_recipient.peer_id,save_media_for_sends_calls[media_recipient.peer_id].media_stream,(data['call-recipient-mediaStream']).media_status)
                     break;
+
+                case 'message-from-members':
+                    message_detect_from_user(data['message-from-members']);
             }
         });
     });
