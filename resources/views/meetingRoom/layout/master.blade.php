@@ -78,6 +78,29 @@
             @include('meetingRoom.room_details.sidebar')
         </div>
     </div>
+    <div>
+        <button type="button" id="btn_for_user_connect_to_room" class="mw-0 mh-0 d-none" data-bs-toggle="modal" data-bs-target="#user_connect_to_room">
+            Launch static backdrop modal
+        </button>
+
+        <div class="modal fade" id="user_connect_to_room" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="user_connect_to_room_Label" aria-hidden="true">
+            <div class="modal-dialog text-light ">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="user_connect_to_room_Label">Do you want to join this room?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <small>By clicking on the connect button, you accept the <a href="#">rules</a> of this site</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="modal_btn_close_user_want_to_make_connection" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="modal_btn_connect_user_want_to_make_connection" onclick="user_want_to_make_connection(false)">connect</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>
@@ -86,4 +109,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"defer></script>
 <script defer src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
 <script src="/js/meetingRoom/meetingRoom_make_connection.js" defer></script>
+<script src="/js/meetingRoom/room_detail/message_with_peer.js" defer></script>
+
 </html>

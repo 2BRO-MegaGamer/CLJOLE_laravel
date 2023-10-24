@@ -1,5 +1,23 @@
+window.addEventListener('load',()=>{
+    document.getElementById("btn_for_user_connect_to_room").click();
+})
+var dataConnection_peer_members = {};
 
-var peer_first = peer_connection(USER_INFO.MY_UNIQUE_ID,null);
+async function user_want_to_make_connection(connected) {
+    var modal_btn_connect_user_want_to_make_connection = document.getElementById("modal_btn_connect_user_want_to_make_connection");
+    var modal_btn_close_user_want_to_make_connection = document.getElementById("modal_btn_close_user_want_to_make_connection");
+    if (!connected) {
+        peer_connection(USER_INFO.MY_UNIQUE_ID,null);
+        modal_btn_connect_user_want_to_make_connection.innerHTML = `
+        <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        `;
+    }else{
+        modal_btn_close_user_want_to_make_connection.click();
+    }
+}
+// var peer_first = peer_connection(USER_INFO.MY_UNIQUE_ID,null);
 let local_stream = [{
     voice : false,
     video : false,
@@ -15,13 +33,16 @@ var use_mic_btn = document.getElementById("use_mic_btn");
 use_mic_btn.addEventListener("click",()=>{
     if (use_mic_btn.getAttribute('mute') == "true") {
         user_want_to_use_mic(public_peer);
-        // var btn_unmuted = ["btn col text-light","bi bi-mic fs-4"];
-        // person.setAttribute('mute',"false");
-        // person.setAttribute('class',btn_unmuted[0]);
-        // document.getElementById(id_for_voice_element).removeAttribute("muted");
-        // (person.children)[0].setAttribute('class',btn_unmuted[1])
+        var btn_unmuted = ["btn col bg-success text-light","bi bi-mic fs-4"];
+        use_mic_btn.setAttribute('mute',"false");
+        use_mic_btn.setAttribute('class',btn_unmuted[0]);
+        (use_mic_btn.children)[0].setAttribute('class',btn_unmuted[1])
     }else{
-
+        user_dont_want_to_use_mic(public_peer);
+        var btn_muted = ["btn col text-light","bi bi-mic-mute fs-4"];
+        use_mic_btn.setAttribute('mute',"true");
+        use_mic_btn.setAttribute('class',btn_muted[0]);
+        (use_mic_btn.children)[0].setAttribute('class',btn_muted[1])
     }
 })
 
@@ -39,10 +60,17 @@ async function user_want_to_use_mic(peer) {
     }, function(err) {
         console.log('Failed to get local stream' ,err);
     });
-    // peer_connected(peer,stream);
 }
 
-
+async function user_dont_want_to_use_mic(peer) {
+        local_stream[0] = {
+            voice : false,
+            video : false,
+            empty : true,
+        }
+        local_stream[1] = undefined;
+        change_media_shar_for_peer(peer,local_stream[1]);
+}
 
 
 function make_empty_media_stream(voice_or_video) {
@@ -405,6 +433,15 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get,media
                 connected_TO_hashtag:USER_INFO.USER_HASHTAG,
                 connected_TO_id:USER_INFO.USER_ID
             }});
+
+            conn.on('open',()=>{
+                dataConnection_peer_members[member_peer_id] = conn;
+    
+                    connection_check[i]['connected'] = true;
+                    conn.on('close', () => {
+                        connection_check[i]['connected'] = false;
+                    })
+            })
             call[i] = peer.call(member_peer_id, media_for_peer , 
                 {metadata:{
                     call_detail:{
@@ -450,12 +487,7 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get,media
                 console.log("send call",call[i] , remoteStream, media_for_peer);
             })
 
-            conn.on('open',()=>{
-                connection_check[i]['connected'] = true;
-                conn.on('close', () => {
-                    connection_check[i]['connected'] = false;
-                })
-            })
+
         }
         setTimeout(async ()=>{
             // remove_member_from_db_no_connection(connection_check,room_uuid);
@@ -534,7 +566,22 @@ function remove_member_from_db_no_connection(members_info,room_uuid) {
     }
 }
 
-
+function check_members_peer_live_connection(peer) {
+    var members_connected_now ={};
+    var peer_connection = peer.connections;
+    var keys_peer = Object.keys(peer_connection);
+    for (let i = 0; i < keys_peer.length; i++) {
+        var connection_event = peer_connection[keys_peer[i]];
+        for (let y = 0; y < connection_event.length; y++) {
+            if (connection_event[i]['open'] === true) {
+                members_connected_now[keys_peer[i]] =  true;
+            }else{
+                members_connected_now[keys_peer[i]]=  false;
+            }
+        }
+    }
+    return(members_connected_now);
+}
 
 
 function peer_connection(unique_id,media_option) {
@@ -548,6 +595,7 @@ function peer_connection(unique_id,media_option) {
         host: '/',
         port: '3002',
     })
+
     peer_check.on('open',(id)=>{
 
         peer_check.connect(unique_id,{metadata:{
@@ -560,10 +608,13 @@ function peer_connection(unique_id,media_option) {
         peer[1] = peer_check;
         connected = true;
         peer_connected(peer,media_for_peer);
+
     })
     setTimeout(()=>{
         if (connected === false) {
             cant_connect_to_peer(unique_id);
+        }else{
+            user_want_to_make_connection(connected)
         }
     },500)
 }

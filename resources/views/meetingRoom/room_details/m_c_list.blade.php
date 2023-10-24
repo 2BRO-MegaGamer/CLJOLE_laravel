@@ -8,22 +8,25 @@
     <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 85%;">
         <div class="d-block">
             @for ($i = 0; $i < 50; $i++)
-            <div class="card my-2 border-danger">
+            <div class="card my-2 border-danger position-relative">
                 <div class="card-header border-bottom border-warning" style="background: #C496FE">
                     userName:
                 </div>
                 <div class="card-body" style="background: #ED96FE;">
                     salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,
                 </div>
+                <div class="position-absolute start-0 bottom-0">
+                    <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>
+                </div>
             </div>
             @endfor
         </div>
     </div>
     <div style="height: 15%;">
-        <div class=" h-100">
+        <div class="h-100">
             <div class="form-floating" style="height: 68%">
-                <textarea class="form-control h-100 rounded-0" placeholder="Leave a comment here" id="floatingTextarea" style="resize: none;"></textarea>
-                <label for="floatingTextarea">Message</label>
+                <textarea id="textarea_for_message_in_room" class="form-control h-100 rounded-0" placeholder="Leave a comment here"  style="resize: none;"></textarea>
+                <label for="textarea_for_message_in_room">Message</label>
             </div>
             <div style="height: 32%">
                 <button class="btn btn-info w-100 h-100 rounded-0"><i class="bi bi-file-earmark-arrow-up fs-4"></i></button>
