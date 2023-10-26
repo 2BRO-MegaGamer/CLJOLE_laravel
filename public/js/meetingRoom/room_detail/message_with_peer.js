@@ -26,11 +26,12 @@ function send_text_message(peer,text,all_data_connection) {
                 sender_user_name : USER_INFO.USER_NAME,
                 sender_hashtag : USER_INFO.USER_HASHTAG,
                 sender_is_host : USER_INFO.AM_I_HOST,
+                sender_Permission : ROOM_INFO.ROOM_Permission,
                 text_message : text
             }})
         }
     }
-    var my_message_html = make_card_message(USER_INFO.USER_NAME,USER_INFO.USER_HASHTAG,USER_INFO.IN_ROOM_NAME,USER_INFO.MY_UNIQUE_ID,USER_INFO.AM_I_HOST,text);
+    var my_message_html = make_card_message(USER_INFO.USER_NAME,USER_INFO.USER_HASHTAG,USER_INFO.IN_ROOM_NAME,USER_INFO.MY_UNIQUE_ID,USER_INFO.AM_I_HOST,text,ROOM_INFO.ROOM_Permission);
     var message_save_in_room = document.getElementById("message_save_in_room");
     message_save_in_room.innerHTML = message_save_in_room.innerHTML + my_message_html;
 }
@@ -43,19 +44,25 @@ function message_detect_from_user(data) {
     var sender_peer_id = data.sender_peer_id;
     var sender_is_host = data.sender_is_host;
     var text_message = data.text_message;
-    var message_html = make_card_message(sender_user_name,sender_hashtag,sender_room_name,sender_peer_id,sender_is_host,text_message);
+    var sender_Permission = data.sender_Permission;
+    var message_html = make_card_message(sender_user_name,sender_hashtag,sender_room_name,sender_peer_id,sender_is_host,text_message,sender_Permission);
     var message_save_in_room = document.getElementById("message_save_in_room");
     message_save_in_room.innerHTML = message_save_in_room.innerHTML + message_html;
 }
 
 
-function make_card_message(sender_user_name,sender_hashtag,sender_room_name,sender_peer_id,sender_is_host,text_message) {
+function make_card_message(sender_user_name,sender_hashtag,sender_room_name,sender_peer_id,sender_is_host,text_message,permission) {
+    var permission_changes={
+        "host":[],
+        "moderator":[],
+        "member":[],
+    }
     var card_html = `
-    <div class="card my-2 border-danger position-relative" id="`+sender_peer_id+`">
-    <div class="card-header border-bottom border-warning" style="background: #C496FE">
+    <div class="card my-2  position-relative" id="`+sender_peer_id+`" style="border:blue 2px lined">
+    <div class="card-header border-bottom border-warning text-start">
         `+sender_room_name+`
     </div>
-    <div class="card-body" style="background: #ED96FE;">
+    <div class="card-body rounded" style="background: #ED96FE;">
         `+text_message+`
     </div>
     <div class="position-absolute start-0 bottom-0">

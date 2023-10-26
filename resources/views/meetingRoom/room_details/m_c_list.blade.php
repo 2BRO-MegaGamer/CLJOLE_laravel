@@ -1,24 +1,27 @@
 
-<div class="position-absolute start-0 z-2 top-0">
-    <button id="close_m_c_list" class="btn btn-danger rounded-0 p-0 m-0"><i class="bi bi-x fs-3"></i></button>
+<div class="position-absolute start-0 top-0 p-0 m-0 z-2 top-0 opacity-75">
+    <button id="close_m_c_list" class="btn btn-danger rounded-1 p-0 m-0"><i class="bi bi-x"></i></button>
 </div>
 
 
 <div id="chat_message_div" class="h-100 border text-center position-relative" style="background:rgb(80, 80, 80);display:none;">
     <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 80%;">
         <div class="d-block" id="message_save_in_room">
+            {{-- <div style="min-height: 20px;width:100%;"></div> --}}
             @for ($i = 0; $i < 50; $i++)
-            {{-- <div class="card my-2 border-danger position-relative">
-                <div class="card-header border-bottom border-warning" style="background: #C496FE">
-                    userName:
+            <div class="card my-4 border-0 position-relative" style="background: none">
+                <div class="text-start text-light p-0 m-0" style="background: none;width:max-content">
+                    userName
                 </div>
-                <div class="card-body" style="background: #ED96FE;">
-                    salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,salam,
+                <div class="card-body m-0 p-0 rounded" style="background: #ED96FE;">
+                    <div class=" mx-4 my-0">
+                        وسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شما 
+                    </div>
                 </div>
-                <div class="position-absolute start-0 bottom-0">
+                <div class="position-absolute start-0 p-0 m-0 bottom-0">
                     <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>
                 </div>
-            </div> --}}
+            </div>
             @endfor
         </div>
     </div>
@@ -37,7 +40,7 @@
 
 <div id="members_list_div" class="w-100 h-100 border " style="background:rgb(80, 80, 80);display:none;">
     <div id="members_info_scroll_style" class="list-group overflow-auto rounded-0"  style="max-height: 100%;">
-        <div class="dropdown">
+        {{-- <div class="dropdown">
             <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
                 <div class="d-flex gap-2 w-100 justify-content-between">
@@ -48,17 +51,15 @@
                     <small class="opacity-50 text-nowrap">16m</small>
                 </div>
             </a>
-            <ul class="dropdown-menu p-0 m-0 rounded" style="max-width: fit-content;">
-                <div class="dropdown-item w-100  p-0 m-0">
-                    <div class="row w-100 p-0 m-0">
-                        <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-3"></i></button>
-                    </div>
+            <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
+                <div class="row w-100 p-0 m-0 ">
+                    <button class="col btn btn-light rounded-0 text-dark " href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-danger " href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
                 </div>
-            </ul>
-        </div>
+            </div>
+        </div> --}}
         @for ($i = 0; $i < 50; $i++)
         <div class="dropdown">
             <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -71,17 +72,14 @@
                     <small class="opacity-50 text-nowrap">16m</small>
                 </div>
             </a>
-            <ul class="dropdown-menu p-0 m-0 rounded" style="max-width: fit-content;">
-                <div class="dropdown-item w-100  p-0 m-0">
-                    <div class="row w-100 p-0 m-0">
-                        <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-warning " href="#"><i class="bi bi-flag  fs-3"></i></button>
-                        <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-3"></i></button>
-                    </div>
+            <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
+                <div class="row w-100 p-0 m-0 ">
+                    <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
                 </div>
-            </ul>
+            </div>
         </div>
         @endfor
     </div>
