@@ -19,6 +19,7 @@ function send_text_message(peer,text,all_data_connection) {
     var members_peer_id = Object.keys(members_info);
     for (let i = 0; i < members_peer_id.length; i++) {
         if (members_info[members_peer_id[i]] === true) {
+            console.log(members_info , "members_info[members_peer_id[i]]");
             (all_data_connection[members_peer_id[i]]).send({"message-from-members":{
                 sender_peer_id : USER_INFO.MY_UNIQUE_ID,
                 sender_room_name : USER_INFO.IN_ROOM_NAME,

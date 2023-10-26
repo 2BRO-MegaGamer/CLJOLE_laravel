@@ -147,13 +147,14 @@ function peer_connected(peer_get,media_option) {
     peer.on('call',(call)=>{
 
         var conn = peer.connect(call['peer']);
+
+        conn.on('open', () => {
+            console.log("opened" , "dataConnection_peer_members");
+            dataConnection_peer_members[call['peer']] = conn;
+        })
         conn.on('close', () => {
 
         })
-        conn.on('open', (id) => {
-            dataConnection_peer_members[call['peer']] = conn;
-        })
-        
         var call_detail = (call.metadata)['call_detail'];
         var call_recipient = call_detail.call_recipient;
         var call_sender = call_detail.call_sender;
@@ -387,7 +388,6 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get,media
             get_all_members(room_uuid,peer,media_option);
         }else{
             get_all_members(room_uuid,peer,null);
-
         }
     }else{
         var Members = Members_get;
@@ -427,84 +427,80 @@ async function make_connection_to_anothers_peer(room_uuid,peer,Members_get,media
         var call = []
         for (let i = 0; i < Members.length; i++) {
             var member_id = Object.keys(Members[i])[0];
-
             var member_peer_id = Members[i][member_id];
-            var member_peer_id_u_h_i = (member_peer_id.split('_')[1]);
-            var member_userName =member_peer_id_u_h_i.split('-')[0];
-            var member_hashtag = "#" + member_peer_id_u_h_i.split('-')[1];
+            if (member_peer_id != USER_INFO.MY_UNIQUE_ID) {
+                var member_peer_id_u_h_i = (member_peer_id.split('_')[1]);
+                var member_userName =member_peer_id_u_h_i.split('-')[0];
+                var member_hashtag = "#" + member_peer_id_u_h_i.split('-')[1];
 
-            var conn = peer.connect(member_peer_id,{metadata:{
-                connected_TO_uq_id:USER_INFO.MY_UNIQUE_ID,
-                connected_TO_username:USER_INFO.USER_NAME,
-                connected_TO_hashtag:USER_INFO.USER_HASHTAG,
-                connected_TO_id:USER_INFO.USER_ID
-            }});
 
-            conn.on('open',()=>{
-                dataConnection_peer_members[member_peer_id] = conn;
-    
-                    connection_check[i]['connected'] = true;
-                    conn.on('close', () => {
-                        connection_check[i]['connected'] = false;
-                    })
-            })
-            call[i] = peer.call(member_peer_id, media_for_peer , 
-                {metadata:{
-                    call_detail:{
-                        call_recipient:{
-                            userName:member_userName,
-                            userID:member_id,
-                            hashtag:member_hashtag,
-                            peer_id:member_peer_id,
-                        },
-                        call_sender:{
-                            userName:USER_INFO.USER_NAME,
-                            userID:USER_INFO.USER_ID,
-                            hashtag:USER_INFO.USER_HASHTAG,
-                            peer_id:USER_INFO.MY_UNIQUE_ID,
-                            is_HOST:USER_INFO.AM_I_HOST,
-                            mediaStream:{
-                                voice:media_status[0],
-                                video:media_status[1],
-                                empty:media_status[2]
+                call[i] = peer.call(member_peer_id, media_for_peer , 
+                    {metadata:{
+                        call_detail:{
+                            call_recipient:{
+                                userName:member_userName,
+                                userID:member_id,
+                                hashtag:member_hashtag,
+                                peer_id:member_peer_id,
                             },
-                        },
-                        HOST:HOST_INFO,
+                            call_sender:{
+                                userName:USER_INFO.USER_NAME,
+                                userID:USER_INFO.USER_ID,
+                                hashtag:USER_INFO.USER_HASHTAG,
+                                peer_id:USER_INFO.MY_UNIQUE_ID,
+                                is_HOST:USER_INFO.AM_I_HOST,
+                                mediaStream:{
+                                    voice:media_status[0],
+                                    video:media_status[1],
+                                    empty:media_status[2]
+                                },
+                            },
+                            HOST:HOST_INFO,
+                        }
                     }
-                }
-            });
-            
-            call[i].on('stream',(remoteStream)=>{
-
-                var call_detail = (call[i].metadata)['call_detail'];
-                var call_recipient = call_detail.call_recipient;
-                var call_sender = call_detail.call_sender;
-                var mediastream_detail = (((call[i].metadata).call_detail).call_sender).mediaStream;
-                save_media_for_sends_calls[call_recipient.peer_id] = {media_stream : remoteStream};
-                make_card_for_voice_chat_card({call_recipient,call_sender},HOST_INFO);
-                change_detail_for_member(call_sender.peer_id,remoteStream,mediastream_detail);
-
-                // if ((mediastream_detail)['video'] === true) {
-                //     console.log("my video detect");
-                    
-                // }else if ((mediastream_detail)['voice'] === true){
-                //     console.log("my voice detect");
-                // }
-                console.log("send call",call[i] , remoteStream, media_for_peer);
-            })
+                });
 
 
+
+                call[i].on('stream',(remoteStream)=>{
+                    var conn = peer.connect(call[i].peer,{metadata:{
+                        connected_TO_uq_id:USER_INFO.MY_UNIQUE_ID,
+                        connected_TO_username:USER_INFO.USER_NAME,
+                        connected_TO_hashtag:USER_INFO.USER_HASHTAG,
+                        connected_TO_id:USER_INFO.USER_ID
+                    }});
+                    conn.on('open',()=>{
+                        dataConnection_peer_members[call[i].peer] = conn;
+                        connection_check[i]['connected'] = true;
+                        conn.on('close', () => {
+                            connection_check[i]['connected'] = false;
+                        })
+                    })
+
+                    var call_detail = (call[i].metadata)['call_detail'];
+                    var call_recipient = call_detail.call_recipient;
+                    var call_sender = call_detail.call_sender;
+                    var mediastream_detail = (((call[i].metadata).call_detail).call_sender).mediaStream;
+                    save_media_for_sends_calls[call_recipient.peer_id] = {media_stream : remoteStream};
+                    make_card_for_voice_chat_card({call_recipient,call_sender},HOST_INFO);
+                    change_detail_for_member(call_sender.peer_id,remoteStream,mediastream_detail);
+                    // if ((mediastream_detail)['video'] === true) {
+                    //     console.log("my video detect");
+                        
+                    // }else if ((mediastream_detail)['voice'] === true){
+                    //     console.log("my voice detect");
+                    // }
+                    console.log("send call",call[i] , remoteStream, media_for_peer);
+                })
+            }
         }
         setTimeout(async ()=>{
             // remove_member_from_db_no_connection(connection_check,room_uuid);
             // add_voice_call_to_anothers_peer(connection_check,room_uuid,peer,await get_voice_media_stream());
-
         },100)
     }
 }
 async function add_voice_call_to_anothers_peer(members,room_uuid,peer,voice_stream) {
-
-
     for (let i = 0; i < members.length; i++) {
         console.log(members);
         if (members[i]['connected'] === true) {
@@ -577,12 +573,14 @@ function check_members_peer_live_connection(peer) {
     var peer_connection = peer.connections;
     var keys_peer = Object.keys(peer_connection);
     for (let i = 0; i < keys_peer.length; i++) {
-        var connection_event = peer_connection[keys_peer[i]];
-        for (let y = 0; y < connection_event.length; y++) {
-            if (connection_event[i]['open'] === true) {
-                members_connected_now[keys_peer[i]] =  true;
-            }else{
-                members_connected_now[keys_peer[i]]=  false;
+        if (keys_peer[i] != USER_INFO.MY_UNIQUE_ID) {
+            var connection_event = peer_connection[keys_peer[i]];
+            for (let y = 0; y < connection_event.length; y++) {
+                if ((connection_event[y])['open'] === true) {
+                    members_connected_now[keys_peer[i]] = true;
+                }else{
+                    members_connected_now[keys_peer[i]] = false;
+                }
             }
         }
     }
