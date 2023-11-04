@@ -31,7 +31,7 @@ function send_text_message(peer,text,all_data_connection) {
             }})
         }
     }
-    var my_message_html = make_card_message(USER_INFO.USER_NAME,USER_INFO.USER_HASHTAG,USER_INFO.IN_ROOM_NAME,USER_INFO.MY_UNIQUE_ID,USER_INFO.AM_I_HOST,text,ROOM_INFO.ROOM_Permission);
+    var my_message_html = make_card_message(USER_INFO.USER_NAME,USER_INFO.USER_HASHTAG,USER_INFO.IN_ROOM_NAME,USER_INFO.MY_UNIQUE_ID,USER_INFO.AM_I_HOST,text,"my");
     var message_save_in_room = document.getElementById("message_save_in_room");
     message_save_in_room.innerHTML = message_save_in_room.innerHTML + my_message_html;
 }
@@ -48,27 +48,56 @@ function message_detect_from_user(data) {
     var message_html = make_card_message(sender_user_name,sender_hashtag,sender_room_name,sender_peer_id,sender_is_host,text_message,sender_Permission);
     var message_save_in_room = document.getElementById("message_save_in_room");
     message_save_in_room.innerHTML = message_save_in_room.innerHTML + message_html;
+    // make_message_scroll_to_bottom(message_save_in_room)
 }
+
+
+// function make_message_scroll_to_bottom(message_div) {
+//     var height_message_div = ;
+    
+// }
 
 
 function make_card_message(sender_user_name,sender_hashtag,sender_room_name,sender_peer_id,sender_is_host,text_message,permission) {
     var permission_changes={
-        "host":[],
-        "moderator":[],
-        "member":[],
+        HOST:{color:"fe6161"},
+        MOD:{color:"f4fe61"},
+        Member:{color:"ED96FE"},
+        my:{color:"96fefc"}
+    }
+    var color;
+    var is_report_able ="";
+
+    switch (permission) {
+        case "HOST":
+            color = permission_changes[permission].color;
+            break;
+        case "MOD":
+            color = permission_changes[permission].color;
+            break;
+        case "Member":
+            color = permission_changes[permission].color;
+            break;
+        case "my":
+            color = permission_changes[permission].color;
+            is_report_able = "d-none";
+            break;
     }
     var card_html = `
-    <div class="card my-2  position-relative" id="`+sender_peer_id+`" style="border:blue 2px lined">
-    <div class="card-header border-bottom border-warning text-start">
+
+    <div class="card border-0 position-relative" id="`+sender_peer_id+`_message" style="background: none;margin-bottom:1rem">
+    <div class="text-start text-light p-0 m-0" style="background: none;width:max-content">
         `+sender_room_name+`
     </div>
-    <div class="card-body rounded" style="background: #ED96FE;">
+    <div class="card-body m-0 p-0 rounded" style="background: #`+color+`;">
+        <div class=" mx-4 my-0">
         `+text_message+`
+        </div>
     </div>
-    <div class="position-absolute start-0 bottom-0">
+    <div class="position-absolute `+is_report_able+` start-0 p-0 m-0 bottom-0">
         <button class="btn p-0 m-0" username="`+sender_user_name+`" hashtag="`+sender_hashtag+`" in_room_name="`+sender_room_name+`" peer_id="`+sender_peer_id+`" is_host="`+sender_is_host+`" ><i class="bi bi-flag"></i></button>
     </div>
-</div>
+    </div>
     `
     return(card_html);
 }

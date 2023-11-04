@@ -7,13 +7,13 @@
 <div id="chat_message_div" class="h-100 border text-center position-relative" style="background:rgb(80, 80, 80);display:none;">
     <div id="chat_message_scroll_style" class="overflow-auto" style="max-height: 80%;">
         <div class="d-block" id="message_save_in_room">
-            {{-- <div style="min-height: 20px;width:100%;"></div> --}}
-            @for ($i = 0; $i < 50; $i++)
+            <div style="min-height: 20px;width:100%;"></div>
+            {{-- @for ($i = 0; $i < 50; $i++)
             <div class="card my-4 border-0 position-relative" style="background: none">
                 <div class="text-start text-light p-0 m-0" style="background: none;width:max-content">
                     userName
                 </div>
-                <div class="card-body m-0 p-0 rounded" style="background: #ED96FE;">
+                <div class="card-body m-0 p-0 rounded" style="background: #f4fe61;">
                     <div class=" mx-4 my-0">
                         وسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شماوسلام بر شما 
                     </div>
@@ -22,7 +22,7 @@
                     <button class="btn p-0 m-0"><i class="bi bi-flag"></i></button>
                 </div>
             </div>
-            @endfor
+            @endfor --}}
         </div>
     </div>
     <div class="position-absolute bottom-0 w-100" style="height: 20%;">

@@ -620,7 +620,7 @@ function peer_connection(unique_id,media_option) {
         }else{
             user_want_to_make_connection(connected)
         }
-    },500)
+    },10000)
 }
 function cant_connect_to_peer(id) {
     peer = false;
