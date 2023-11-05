@@ -61,6 +61,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>{{$roomID}}</title>
 </head>
+<div id="unload_spining_div" class="z-3 text-center" style="background: rgba(0, 0, 0, 0.789)">
+    <div  class="position-absolute start-50 top-50 translate-middle h-100 w-100 vh-100 vw-100 mw-100 mh-100">
+        <div class="spinner-border text-primary text-center" role="status" style="width: 15rem; height: 15rem;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+</div>
 <body>
     <div class=" mh-100 p-0 m-0" style="max-width: 100%;">
         <div class="row p-0 m-0 " style="width: 100%;">

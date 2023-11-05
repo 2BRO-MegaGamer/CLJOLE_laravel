@@ -40,48 +40,77 @@
 
 <div id="members_list_div" class="w-100 h-100 border " style="background:rgb(80, 80, 80);display:none;">
     <div id="members_info_scroll_style" class="list-group overflow-auto rounded-0"  style="max-height: 100%;">
-        {{-- <div class="dropdown">
-            <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                <div class="d-flex gap-2 w-100 justify-content-between">
-                    <div>
-                        <h6 class="mb-0">userName </h6>
-                        <p class="mb-0 opacity-75">#0001</p>
+        <div id="hosts_info">
+            <div class="dropdown">
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                    <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                            <h6 class="mb-0">userName </h6>
+                            <p class="mb-0 opacity-75">#0001</p>
+                        </div>
+                        <small class="opacity-100  my-auto text-end">🟢</small>
                     </div>
-                    <small class="opacity-50 text-nowrap">16m</small>
-                </div>
-            </a>
-            <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
-                <div class="row w-100 p-0 m-0 ">
-                    <button class="col btn btn-light rounded-0 text-dark " href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
-                    <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
-                    <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
-                    <button class="col btn btn-light rounded-0 text-danger " href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
-                </div>
-            </div>
-        </div> --}}
-        @for ($i = 0; $i < 50; $i++)
-        <div class="dropdown">
-            <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                <div class="d-flex gap-2 w-100 justify-content-between">
-                    <div>
-                        <h6 class="mb-0">userName </h6>
-                        <p class="mb-0 opacity-75">#0001</p>
+                </a>
+                <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
+                    <div class="row w-100 p-0 m-0 ">
+                        <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
                     </div>
-                    <small class="opacity-50 text-nowrap">16m</small>
-                </div>
-            </a>
-            <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
-                <div class="row w-100 p-0 m-0 ">
-                    <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
-                    <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
-                    <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
-                    <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
                 </div>
             </div>
         </div>
+        <div id="mods_info">
+            <div class="dropdown">
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                    <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                            <h6 class="mb-0">userName </h6>
+                            <p class="mb-0 opacity-75">#0001</p>
+                        </div>
+                        <small class="opacity-100 my-auto text-end">🔴</small>
+                    </div>
+                </a>
+                <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
+                    <div class="row w-100 p-0 m-0 ">
+                        <button class="col btn btn-light rounded-0 text-dark " href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-danger " href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="members_info">
+
+
+            @for ($i = 0; $i < 50; $i++)
+            <div class="dropdown">
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                    <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                            <h6 class="mb-0">userName </h6>
+                            <p class="mb-0 opacity-75">#0001</p>
+                        </div>
+                        <small class="opacity-100  my-auto text-end">🟢</small>
+                    </div>
+                </a>
+                <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
+                    <div class="row w-100 p-0 m-0 ">
+                        <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
+                    </div>
+                </div>
+            </div>
         @endfor
+
+
+        </div>
+
+
     </div>
 </div>
 <script src="/js/meetingRoom/room_detail/m_c_list.js"></script>
@@ -116,3 +145,30 @@
 
 
 </style>
+
+
+
+
+
+
+
+        {{-- <div class="dropdown">
+            <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                    <div>
+                        <h6 class="mb-0">userName </h6>
+                        <p class="mb-0 opacity-75">#0001</p>
+                    </div>
+                    <small class="opacity-50 text-nowrap">16m</small>
+                </div>
+            </a>
+            <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
+                <div class="row w-100 p-0 m-0 ">
+                    <button class="col btn btn-light rounded-0 text-dark " href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                    <button class="col btn btn-light rounded-0 text-danger " href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
+                </div>
+            </div>
+        </div> --}}
