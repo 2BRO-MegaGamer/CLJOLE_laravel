@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\inRoomController;
+use App\Http\Controllers\Profile;
 use App\Models\ChatInfo;
 use Database\Factories\ChatInfoFactory;
 use GuzzleHttp\Promise\Create;
@@ -39,6 +40,12 @@ Route::get('logout', [LoginController::class, 'logout']);
 Route::middleware('auth')->group(function () {
     Route::get('/seeprofile',[SeeprofileController::class , 'seeprofile']);
     Route::post('/seeprofile',[SeeprofileController::class , 'UserName_bio_img_change']);
+
+
+
+
+
+    Route::post('/get_user_profiel_and_detail',[Profile::class , 'profile_details']);
 
 
 

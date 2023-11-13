@@ -46,15 +46,15 @@
                     <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
                     <div class="d-flex gap-2 w-100 justify-content-between">
                         <div>
-                            <h6 class="mb-0">userName </h6>
-                            <p class="mb-0 opacity-75">#0001</p>
+                            <h6 class="mb-0">{{$HOST_userName}}</h6>
+                            <p class="mb-0 opacity-75">{{$HOST_hashtag}}</p>
                         </div>
                         <small class="opacity-100  my-auto text-end">🟢</small>
                     </div>
                 </a>
                 <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">
                     <div class="row w-100 p-0 m-0 ">
-                        <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
                     </div>
                 </div>
             </div>
@@ -76,6 +76,7 @@
                         <button class="col btn btn-light rounded-0 text-dark " href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
                         <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
                         <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-success rounded-end" href="#"><i class="bi bi-person-fill-check fs-4 p-0 m-0"></i></button>
                         <button class="col btn btn-light rounded-0 text-danger " href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
                     </div>
                 </div>
@@ -101,6 +102,7 @@
                         <button class="col btn btn-light rounded-0 text-dark rounded-start" href="#"><i class="bi bi-ban fs-4 p-0 m-0"></i></button>
                         <button class="col btn btn-light rounded-0 text-info" href="#"><i class="bi bi-megaphone fs-4 p-0 m-0"></i></button>
                         <button class="col btn btn-light rounded-0 text-secondary" href="#"><i class="bi bi-info-circle fs-4 p-0 m-0"></i></button>
+                        <button class="col btn btn-light rounded-0 text-success rounded-end" href="#"><i class="bi bi-person-fill-check fs-4 p-0 m-0"></i></button>
                         <button class="col btn btn-light rounded-0 text-danger rounded-end" href="#"><i class="bi bi-arrow-bar-right fs-4 p-0 m-0"></i></button>
                     </div>
                 </div>

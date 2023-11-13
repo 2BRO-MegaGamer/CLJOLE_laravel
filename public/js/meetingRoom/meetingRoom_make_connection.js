@@ -612,15 +612,19 @@ function peer_connection(unique_id,media_option) {
         peer[1] = peer_check;
         connected = true;
         peer_connected(peer,media_for_peer);
-
+        user_want_to_make_connection(connected);
+        connected = undefined;
+        
     })
     setTimeout(()=>{
         if (connected === false) {
             cant_connect_to_peer(unique_id);
         }else{
-            user_want_to_make_connection(connected)
+            if (connected != undefined) {
+                user_want_to_make_connection(connected);
+            }
         }
-    },10000)
+    },60000)
 }
 function cant_connect_to_peer(id) {
     peer = false;

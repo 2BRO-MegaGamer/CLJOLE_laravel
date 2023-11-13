@@ -23,6 +23,7 @@ class SeeprofileController extends Controller
 
         $user_tabel=['firstName','lastName','UserName'];
         $difference = $this->get_diff_req($request);
+
         foreach ($difference as $Kdiff => $Vdiff) {
             if (in_array($Kdiff,$user_tabel)) {
                 if ($Kdiff == "UserName") {
@@ -44,9 +45,7 @@ class SeeprofileController extends Controller
                 }else{
                     $size = $request->file('prof_Img')->getSize();
                     $name = auth()->id() . "_" . auth()->user()->UserName ."_"  . date("Y-m-d") . "_" . date("H-i-s") .".png";
-
                     $all_Storage_Uploaded_images = Storage::disk('public')->allFiles('imgs/uploads/');
-
                     for ($i=0; $i < count($all_Storage_Uploaded_images); $i++) { 
                         $analysis_files_name = explode('imgs/uploads/',$all_Storage_Uploaded_images[$i])[1];
                         $analysis_files_user_id = explode("_", $analysis_files_name);
@@ -54,11 +53,7 @@ class SeeprofileController extends Controller
                             Storage::delete('public/'.$all_Storage_Uploaded_images[$i]);
                         }
                     }
-                    
-                    if (($request->file('prof_Img')->storeAs('public/imgs/uploads', $name)) == false) {
-                        return view('/seeprofile',['Serrors'=>'Store Image try again']);
-                    }else{
-
+                    if (($request->file('prof_Img')->storeAs('public/imgs/uploads/', $name)) != false) {
                         Profile_img_bio::where('user_id',auth()->id())
                         ->update([
                             'prof_Img_name' => $name,
@@ -67,14 +62,7 @@ class SeeprofileController extends Controller
                             'type' => 'png',
                         ]);
                     }
-                    
-
-
-
-
                 }
-
-
             }
         }
         User::where('id',auth()->id())

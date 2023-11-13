@@ -8,16 +8,19 @@
   $profile=(new Profile)->profile_details();
   if ($profile["profile"]->prof_Img_name != null) {
     $prof_img = asset('storage/imgs/uploads/'. $profile["profile"]->prof_Img_name);
+    $size = Storage::size('imgs/uploads/'. $profile["profile"]->prof_Img_name);
+    dd($$size);
   }else{
     $prof_img = null;
   }
 @endphp
+<script></script>
 <div id="profile_style_f_div" class="position-relative">
   <div  class="position-absolute start-50 translate-middle-x">
     <div class="card" id="profile_style_s_div" style="max-width: 500px;height:100%;background:{{ $profile['profile']->prof_Color }}">
       <div class="row g-0">
         <div>
-          <img src="{{ ($profile["profile"]->prof_Img_name == null) ? 'https://cdn.icon-icons.com/icons2/3054/PNG/512/account_profile_user_icon_190494.png' : asset('storage/imgs/uploads/'. $profile["profile"]->prof_Img_name) }}"  class="img-fluid rounded-start" >
+          <img src="{{ ($prof_img == null) ? 'https://cdn.icon-icons.com/icons2/3054/PNG/512/account_profile_user_icon_190494.png' : $prof_img }}"  class="img-fluid rounded-start" >
         </div>
         <div class="col-md-8 w-100">
           <div class="card-body">
