@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html id="html">
 <html lang="en">
     @php
         use App\Models\Rooms;
@@ -61,15 +61,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>{{$roomID}}</title>
 </head>
-<div id="unload_spining_div" class="z-3 text-center" style="background: rgba(0, 0, 0, 0.789)">
+{{-- <div id="unload_spining_div" class="z-3 text-center" style="background: rgba(0, 0, 0, 0.789)">
     <div  class="position-absolute start-50 top-50 translate-middle h-100 w-100 vh-100 vw-100 mw-100 mh-100">
         <div class="spinner-border text-primary text-center" role="status" style="width: 15rem; height: 15rem;">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 
-</div>
-<body>
+</div> --}}
+<body id="body">
     <div class=" mh-100 p-0 m-0" style="max-width: 100%;">
         <div class="row p-0 m-0 " style="width: 100%;">
             <div class="col p-0 vh-100" id="webcam_or_mic_in_use" style="max-width: 15%;">
@@ -118,5 +118,6 @@
 <script defer src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
 <script src="/js/meetingRoom/meetingRoom_make_connection.js" defer></script>
 <script src="/js/meetingRoom/room_detail/message_with_peer.js" defer></script>
+<script src="/js/meetingRoom/room_detail/set_size_for_page.js" defer></script>
 
 </html>
