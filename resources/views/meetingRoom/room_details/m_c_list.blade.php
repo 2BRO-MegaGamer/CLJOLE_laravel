@@ -42,14 +42,14 @@
     <div id="members_info_scroll_style" class="list-group overflow-auto rounded-0"  style="max-height: 100%;">
         <div id="hosts_info">
             <div class="dropdown">
-                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <a class="list-group-item list-group-item-action d-flex gap-3 py-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img id="HOST_profile_img" src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
                     <div class="d-flex gap-2 w-100 justify-content-between">
                         <div>
-                            <h6 class="mb-0">{{$HOST_userName}}</h6>
-                            <p class="mb-0 opacity-75">{{$HOST_hashtag}}</p>
+                            <h6 id="HOST_userName" class="mb-0">{{$HOST_userName}}</h6>
+                            <p id="HOST_hashtag" class="mb-0 opacity-75">{{$HOST_hashtag}}</p>
                         </div>
-                        <small class="opacity-100  my-auto text-end">🟢</small>
+                        <small id="HOST_internet_status" class="opacity-100  my-auto text-end">🟢</small>
                     </div>
                 </a>
                 <div class="dropdown-menu  p-0 m-0 " style="max-width: fit-content;">

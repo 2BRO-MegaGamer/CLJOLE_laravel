@@ -9,7 +9,7 @@
   if ($profile["profile"]->prof_Img_name != null) {
     $prof_img = asset('storage/imgs/uploads/'. $profile["profile"]->prof_Img_name);
     $size = Storage::size('imgs/uploads/'. $profile["profile"]->prof_Img_name);
-    dd($$size);
+    dd($size);
   }else{
     $prof_img = null;
   }
