@@ -30,7 +30,7 @@
 
             </div>
         </nav>
-        <script src="/js/header/get_info_friend.js"></script>
+        <script src="/js/header/get_info_friend.js" defer></script>
 
     </div>
 @endsection

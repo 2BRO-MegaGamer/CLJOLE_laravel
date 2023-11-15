@@ -31,9 +31,10 @@ class SeeprofileController extends Controller
                     $hashtag = (new RegisterController)->hashtag_generator($difference[$Kdiff]);
 
                     User::where('id',auth()->id())
-                        ->update(['hashtag' => $hashtag]);
-                    User::where('id',auth()->id())
-                        ->update(['UserName' => $difference[$Kdiff]]);
+                        ->update([
+                            'UserName' => $difference[$Kdiff],
+                            'hashtag' => $hashtag
+                        ]);
                 }else{
                     User::where('id',auth()->id())
                     ->update([$Kdiff => $difference[$Kdiff]]);

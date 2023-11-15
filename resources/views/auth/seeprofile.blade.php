@@ -7,9 +7,11 @@
 
   $profile=(new Profile)->profile_details();
   if ($profile["profile"]->prof_Img_name != null) {
-    $prof_img = asset('storage/imgs/uploads/'. $profile["profile"]->prof_Img_name);
-    $size = Storage::size('imgs/uploads/'. $profile["profile"]->prof_Img_name);
-    dd($size);
+    $file_exists = Storage::disk('public')->exists('imgs/uploads/'.$profile["profile"]->prof_Img_name);
+    $prof_img = asset('storage/' . 'imgs/uploads/'.$profile["profile"]->prof_Img_name);
+    // $prof_img = url('/imgs/uploads/'.$profile["profile"]->prof_Img_name);
+    // dd($prof_img);
+
   }else{
     $prof_img = null;
   }
@@ -20,7 +22,7 @@
     <div class="card" id="profile_style_s_div" style="max-width: 500px;height:100%;background:{{ $profile['profile']->prof_Color }}">
       <div class="row g-0">
         <div>
-          <img src="{{ ($prof_img == null) ? 'https://cdn.icon-icons.com/icons2/3054/PNG/512/account_profile_user_icon_190494.png' : $prof_img }}"  class="img-fluid rounded-start" >
+          <img src="{{ ($prof_img == null) ? 'https://cdn.icon-icons.com/icons2/3054/PNG/512/account_profile_user_icon_190494.png' : $prof_img }}"  class="img-fluid rounded" >
         </div>
         <div class="col-md-8 w-100">
           <div class="card-body">

@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>{{$title}}</title>
 </head>
+
 <body style="background-color: rgb(95, 95, 95)">
+
     <div id="model_controller_friends"></div>
     @include('layouts.header_nav')
     <div id="header" class="z-3">
@@ -43,8 +45,24 @@
         </footer>
     </div>
     <div id="react_example"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <script src="{{ asset('jquery.js') }}"></script>
-    <script src="/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous" defer></script>
+    <script src="{{ asset('jquery.js') }}" defer></script>
+    <script >
+
+        var all_imgs = document.querySelectorAll('img');
+        var all_videos = document.querySelectorAll('video');
+        for (let i = 0; i < all_imgs.length; i++) {
+            all_imgs[i].addEventListener("unload",()=>{
+                all_imgs[i].style.filter="blur(30px)"
+
+            })
+            console.log(all_imgs[i] , "detect");
+        }
+        for (let y = 0; y < all_videos.length; y++) {
+            
+        }
+            
+    </script>
+    <script src="/js/script.js" defer></script>
 </body>
 </html>

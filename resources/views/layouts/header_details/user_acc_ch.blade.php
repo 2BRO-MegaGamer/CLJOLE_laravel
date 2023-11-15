@@ -97,7 +97,7 @@ if ($profile['profile']->user_id != null) {
 
 
 </style>
-<script>
+<script defer>
 document.getElementById("hashtag_value_small").addEventListener("click",(e)=>{
     var hashtag_value_small = document.getElementById("hashtag_value_small")
     var info_user_btn = document.getElementById("info_user_btn")
@@ -124,7 +124,7 @@ $server_path = 'http://'. $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'
 $user_hash_id = auth()->user()->UserName."_".auth()->user()->hashtag."_".auth()->id();
 $user_token = password_hash($user_hash_id,PASSWORD_DEFAULT);
 ?>
-<script>
+<script defer>
     const username = '{{auth()->user()->UserName}}';
     const hashtag = '{{auth()->user()->hashtag}}';
     const user_id = '{{auth()->id()}}';
@@ -147,7 +147,6 @@ function friend_data(username,hashtag,user_id,user_token,bool) {
         },
         dataType: "json",
         success: function(data) {
-            console.log(data);
             if (data.length != 0) {
             var send_data = data[0];
             var get_data = data[1];
@@ -208,7 +207,7 @@ if (btn_get != null) {
         friend_data(username,hashtag,user_id,user_token,bool_for_click);
         bool_for_click = false;
 
-    },1000)
+    },5000)
 }
 
 
