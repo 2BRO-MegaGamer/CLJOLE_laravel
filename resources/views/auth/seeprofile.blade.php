@@ -5,7 +5,7 @@
   $title = 'Profile';
   use App\Http\Controllers\Profile;
 
-  $profile=(new Profile)->profile_details();
+  $profile=(new Profile)->profile_details(auth()->id());
   if ($profile["profile"]->prof_Img_name != null) {
     $file_exists = Storage::disk('public')->exists('imgs/uploads/'.$profile["profile"]->prof_Img_name);
     $prof_img = asset('storage/' . 'imgs/uploads/'.$profile["profile"]->prof_Img_name);
@@ -96,7 +96,7 @@
   
             </div>
             <label for="file-upload">Upload Image</label>
-            <input type="file" id="file-upload" accept="image/*" name="prof_Img" onchange="previewImage(event);" />
+            <input type="file" id="file-upload" accept=".jpg,.png" name="prof_Img" onchange="previewImage(event);" />
             
         </div>
         <div class="modal-footer p-0 m-0">

@@ -7,4 +7,8 @@ function set_max_height_width() {
     body.setAttribute("style",style_value);
     console.log("size changed",style_value);
 }
-set_max_height_width()
+set_max_height_width();
+
+window.addEventListener('resize',()=>{
+    set_max_height_width();
+})

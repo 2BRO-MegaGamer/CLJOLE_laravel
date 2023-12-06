@@ -18,7 +18,33 @@
                 <button id="announcement_sidebar_btn" class="btn btn-light rounded-0 rounded-start w-100 h-100 fs-3"><i class="bi bi-bell"></i></button>
             </li>
             <li class="nav-item border-top">
-                <button id="status_sidebar_btn" class="btn btn-light rounded-0 rounded-start w-100 h-100 fs-3"><i class="bi bi-pen"></i></button>
+                <div class="btn-group w-100 h-100">
+                    <button class="btn btn-light rounded-0 rounded-start w-100 h-100 fs-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <ul class="dropdown-menu ">
+                        <div class="row p-0 m-0 ">
+                            <div class="col fs-4">
+                                <i class="bi bi-eye"></i>
+                            </div>
+                            <div class="col  fs-4">
+                                <i class="bi bi-chat-square-dots"></i>
+                            </div>
+                            <div class="col  fs-4">
+                                <i class="bi bi-headphones"></i>
+                            </div>
+                            <div class="col  fs-4">
+                                <i class="bi bi-mic"></i>
+                            </div>
+                            <div class="col  fs-4">
+                                <i class="bi bi-webcam"></i>
+                            </div>
+                            <div class="col fs-6">
+                                <span>AFK</span>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
             </li>
         </ul>
         <div class="m-auto text-center border-top" style="height: 10%;">

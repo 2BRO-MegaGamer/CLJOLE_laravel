@@ -85,18 +85,18 @@ function make_card_message(sender_user_name,sender_hashtag,sender_room_name,send
     }
     var card_html = `
 
-    <div class="card border-0 position-relative" id="`+sender_peer_id+`_message" style="background: none;margin-bottom:1rem">
-    <div class="text-start text-light p-0 m-0" style="background: none;width:max-content">
-        `+sender_room_name+`
-    </div>
-    <div class="card-body m-0 p-0 rounded" style="background: #`+color+`;">
-        <div class=" mx-4 my-0">
-        `+text_message+`
+    <div class="card border-0 position-relative" id="`+sender_peer_id+`_message" style="background: none;margin-bottom:1rem ;background:rgba(125,125,125,0.5);">
+        <div class="text-start text-light p-0 m-0" style="background: none;width:max-content">
+            `+sender_room_name+` `+sender_hashtag+`
         </div>
-    </div>
-    <div class="position-absolute `+is_report_able+` start-0 p-0 m-0 bottom-0">
-        <button class="btn p-0 m-0" username="`+sender_user_name+`" hashtag="`+sender_hashtag+`" in_room_name="`+sender_room_name+`" peer_id="`+sender_peer_id+`" is_host="`+sender_is_host+`" ><i class="bi bi-flag"></i></button>
-    </div>
+        <div class="card-body m-0 p-0 rounded-bottom" style="background: #`+color+`;">
+            <div class=" mx-4 my-0">
+            `+text_message+`
+            </div>
+        </div>
+        <div class="position-absolute `+is_report_able+` start-0 p-0 m-0 bottom-0">
+            <button class="btn p-0 m-0" username="`+sender_user_name+`" hashtag="`+sender_hashtag+`" in_room_name="`+sender_room_name+`" peer_id="`+sender_peer_id+`" is_host="`+sender_is_host+`" ><i class="bi bi-flag"></i></button>
+        </div>
     </div>
     `
     return(card_html);

@@ -7,7 +7,7 @@ use App\Http\Controllers\UserStatusController;
 
 (new UserStatusController)->change_statuse_online(auth()->user()->id,auth()->user()->UserName);
 
-$profile=(new Profile)->profile_details();
+$profile=(new Profile)->profile_details(auth()->id());
 
 
 if ($profile['profile']->user_id != null) {

@@ -50,6 +50,7 @@
         const HOST_INFO = {
             HOST_NAME: "{{$HOST_userName}}",
             HOST_HASHTAG: "{{$HOST_hashtag}}",
+            HOST_BIO: "{{$HOST_hashtag}}",
             HOST_id: "{{$HOST_id}}",
             HOST_peer_id: ""+ "{{$roomUUID}}" +'_'+"{{$HOST_userName}}"+'-'+(("{{$HOST_hashtag}}").split('#'))[1]+'-'+"{{$HOST_id}}",
         };
@@ -70,6 +71,8 @@
 
 </div> --}}
 <body id="body">
+    <div id="AFK_TESTS">
+    </div>
     <div class=" mh-100 p-0 m-0" style="max-width: 100%;">
         <div class="row p-0 m-0 " style="width: 100%;">
             <div class="col p-0 vh-100" id="webcam_or_mic_in_use" style="max-width: 15%;">
@@ -87,9 +90,7 @@
         </div>
     </div>
     <div>
-        <button type="button" id="btn_for_user_connect_to_room" class="mw-0 mh-0 d-none" data-bs-toggle="modal" data-bs-target="#user_connect_to_room">
-            Launch static backdrop modal
-        </button>
+        <button type="button" id="btn_for_user_connect_to_room" class="mw-0 mh-0 d-none" data-bs-toggle="modal" data-bs-target="#user_connect_to_room"></button>
 
         <div class="modal fade" id="user_connect_to_room" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="user_connect_to_room_Label" aria-hidden="true">
             <div class="modal-dialog text-light ">
@@ -112,12 +113,16 @@
 
 
 </body>
-<script src="{{ asset('jquery.js') }}"></script>
-<script src="/js/meetingRoom/room_detail/master_page_resize.js"></script>
+<script src="{{ asset('jquery.js') }}" defer></script>
+<script src="/js/meetingRoom/room_detail/master_page_resize.js" defer></script>
+<script src="/js/meetingRoom/room_detail/afk_math_test.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"defer></script>
-<script defer src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
+<script  src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js" defer></script>
 <script src="/js/meetingRoom/meetingRoom_make_connection.js" defer></script>
 <script src="/js/meetingRoom/room_detail/message_with_peer.js" defer></script>
 <script src="/js/meetingRoom/room_detail/set_size_for_page.js" defer></script>
+<script src="/js/meetingRoom/room_detail/m_c_list.js" defer></script>
+<script src="/js/click_on_imgs.js" defer></script>
+<script src="/js/meetingRoom/room_detail/person_activity_info.js" defer></script>
 
 </html>

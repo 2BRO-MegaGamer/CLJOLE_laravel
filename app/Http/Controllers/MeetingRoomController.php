@@ -52,11 +52,13 @@ class MeetingRoomController extends Controller
             if (count($get_rooms) == 0) {
                 return redirect('/mR/joinTo/'.$roomID)->with(['message'=>[false,'There is no room with this id',$roomID]]);
             }else{
-                $info_user_inRoom = $this->check_user_status_in_room($get_rooms);
-                $member_check = $this->am_i_in_list($get_rooms,"Members");
+                $info_user_inRoom = $this->check_user_status_in_room($get_rooms[0],auth()->id());
+                $member_check = $this->is_member_in_list($get_rooms[0],"Members",auth()->id());
+
                 $dublicate_detect = "false";
                 if ($member_check === true) {
                     $dublicate_detect = "true";
+
                 }
                 $room_type = $get_rooms[0]->type;
                 $host_details = ($this->get_host_information($roomID));
@@ -64,10 +66,10 @@ class MeetingRoomController extends Controller
                     if ($Bool_ids  === true) {
                         $Permission = '';
                         switch ($column) {
-                            case 'host':
+                            case 'HOST':
                                 $Permission = 'HOST';
                                 break;
-                            case 'moderator':
+                            case 'MOD':
                                 $Permission = 'MOD';
                                 break;
                             case 'accept_m':
@@ -78,7 +80,7 @@ class MeetingRoomController extends Controller
                                 break;
                         }
                         if ($Permission !== 'NULL') {
-                            $this->make_user_visible_in_Member_list($roomID,$get_rooms);
+                            $this->make_user_visible_in_Member_list($get_rooms[0]);
                             return view('meetingRoom.Room',[
                                 'my_custom_name'=>$request->my_custom_name,
                                 'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,
@@ -86,13 +88,14 @@ class MeetingRoomController extends Controller
                                 'duplicate'=>$dublicate_detect,
                                 "HOST_userName"=> $host_details[0],
                                 "HOST_hashtag"=> $host_details[1],
+                                "HOST_bio"=> $host_details[1],
                                 "HOST_id"=> $host_details[2],
                             ]);
                         }
                     }
                 }
                 if ($room_type === 'public') {
-                    $this->make_user_visible_in_Member_list($roomID,$get_rooms);
+                    $this->make_user_visible_in_Member_list($get_rooms[0]);
                     return view('meetingRoom.Room',[
                         'my_custom_name'=>$request->my_custom_name,
                         'roomUUID'=>$roomID,'roomID'=>$get_rooms[0]->id,
@@ -137,8 +140,8 @@ class MeetingRoomController extends Controller
 
 
 
-    public function make_user_visible_in_Member_list($room_id,$room_info){
-        $member_check = $this->am_i_in_list($room_info,"Members");
+    public function make_user_visible_in_Member_list($room_info){
+        $member_check = $this->is_member_in_list($room_info,"Members",auth()->id());
         $need_update = true;
         $string_ids='';
         if (!($member_check === true)) {
@@ -151,7 +154,7 @@ class MeetingRoomController extends Controller
             $need_update = false;
         }
         if ($need_update) {
-            Rooms::where('room_uuid',$room_id)->update([
+            Rooms::where('room_uuid',$room_info->room_uuid)->update([
                 'Members'=> $string_ids
             ]);
         }
@@ -168,18 +171,23 @@ class MeetingRoomController extends Controller
             return view('meetingRoom.join',['roomID'=>$roomID]);
         }
     }
-    public function check_user_status_in_room($roomID){
-        $host_check = $this->am_i_host($roomID[0]);
-        $moderator_check = $this->am_i_in_list($roomID,array_keys($roomID[0]->toArray())[5]);
-        $accept_m_check = $this->am_i_in_list($roomID,array_keys($roomID[0]->toArray())[7]);
-        $wait_to_accept_check = $this->am_i_in_list($roomID,array_keys($roomID[0]->toArray())[6]);
-        $all_data = ["host"=>$host_check,"moderator"=>$moderator_check,"accept_m"=>$accept_m_check,"wait_to_accept"=>$wait_to_accept_check];
+    public function check_user_status_in_room($roomID,$user_id){
+        if (is_string($roomID)) {
+            $get_rooms = Rooms::where('room_uuid',$roomID)->get();
+            $roomID = $get_rooms[0];
+        }
+        $host_check = $this->is_member_host($roomID,$user_id);
+        $moderator_check = $this->is_member_in_list($roomID,array_keys($roomID->toArray())[5],$user_id);
+        $accept_m_check = $this->is_member_in_list($roomID,array_keys($roomID->toArray())[7],$user_id);
+        $wait_to_accept_check = $this->is_member_in_list($roomID,array_keys($roomID->toArray())[6],$user_id);
+        $all_data = ["HOST"=>$host_check,"MOD"=>$moderator_check,"accept_m"=>$accept_m_check,"wait_to_accept"=>$wait_to_accept_check];
+
         return $all_data;
     }
 
 
-    public function am_i_host($roomInfo){
-        if (($roomInfo->creator_id) == auth()->id()) {
+    public function is_member_host($roomInfo,$user_id){
+        if (($roomInfo->creator_id) == $user_id) {
             return true;
         }else{
             return false;
@@ -187,14 +195,14 @@ class MeetingRoomController extends Controller
     }
 
 
-    public function am_i_in_list($room_INFO,$column){
+    public function is_member_in_list($room_INFO,$column,$user_id){
         $bool_am_i = false;
-        if ($room_INFO[0]->$column == null) {
+        if ($room_INFO->$column === null) {
             return null;
         }else{
-            $list_members = explode(",",$room_INFO[0]->$column);
+            $list_members = explode(",",$room_INFO->$column);
             for ($i=0; $i < count($list_members); $i++) { 
-                if ($list_members[$i] == auth()->id()) {
+                if ($list_members[$i] == $user_id) {
                     $bool_am_i = true;
                 }
             }
@@ -276,6 +284,12 @@ class MeetingRoomController extends Controller
                     }else{
                         return [];
                     }
+                }else{
+                    $member = User::where('id',auth()->id())->get();
+                    $member_info = $member[0]->UserName . "-" . (explode('#',$member[0]->hashtag)[1]) . "-" . auth()->id();
+
+                    $get_member_peer_id = $request->room_uuid ."_" . $member_info;
+                    array_push($peer_ids,[auth()->id() => $get_member_peer_id]);
                 }
             }
             return($peer_ids);

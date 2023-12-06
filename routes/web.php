@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::post('/get_user_profiel_and_detail',[Profile::class , 'profile_details']);
+    Route::post('/get_member_profile_and_detail',[Profile::class , 'get_members_profile_info_with_peer_id']);
 
 
 

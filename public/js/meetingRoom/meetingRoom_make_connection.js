@@ -517,6 +517,7 @@ async function add_voice_call_to_anothers_peer(members,room_uuid,peer,voice_stre
 }
 
 async function get_all_members(room_uuid,peer,media_option) {
+    await change_host_prof_img();
     $.ajax({
         type: "POST",
         headers: {
@@ -533,7 +534,8 @@ async function get_all_members(room_uuid,peer,media_option) {
             room_uuid: room_uuid,
         },
         dataType: "json",
-        success: function(resultData) {make_connection_to_anothers_peer(room_uuid,peer,resultData,media_option);}
+    
+    success: function(resultData) {make_connection_to_anothers_peer(room_uuid,peer,resultData,media_option);get_members_profile_info(resultData,null,false);}
     });
 
 
