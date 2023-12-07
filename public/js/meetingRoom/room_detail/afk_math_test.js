@@ -75,16 +75,17 @@ function AFK_math_test() {
     if (random_test === undefined) {
         AFK_math_test();
     }else{
-        front_modal_for_test(random_test,selected_option);
+        random_test["selected"] = selected_option;
+        front_modal_for_test(random_test);
     }
 }
 
 
 
-function front_modal_for_test(selected_test,option) {
-    console.log(selected_test,option);
+function front_modal_for_test(option) {
+    console.log(option);
     var option_selected;
-    switch (option) {
+    switch (option.selected) {
         case "multiply":
             option_selected = "*";
             break;
@@ -113,13 +114,14 @@ function front_modal_for_test(selected_test,option) {
                     <div class="row">
                         <div class="col-sm-9">
                             <div class="row fs-5">
-                                <span class="col text-center">`+selected_test[0]+`</span>
+                                <span class="col text-center">`+option[0]+`</span>
                                 <span class="col-3 text-center">`+option_selected+`</span>
-                                <span class="col text-center">`+selected_test[1]+`</span>
+                                <span class="col text-center">`+option[1]+`</span>
                             </div>
                         </div>
                         <div class="col-3">
-                            <input type="number" min="1" max="50" step="1" class="form-control">
+                            <input type="number" id="`+USER_INFO.MY_UNIQUE_ID+`_input" min="1" max="50" step="1" class="form-control">
+
                         </div>
                     </div>
                 </div>
@@ -128,6 +130,73 @@ function front_modal_for_test(selected_test,option) {
     </div>
     `;
 
+
     document.getElementById("AFK_TESTS").innerHTML = html_modal;
     document.getElementById("btn_if_user_was_afk").click();
+    var timer_id = start_timer();
+    console.log(timer_id);
+    answer_test(USER_INFO.MY_UNIQUE_ID+"_afk_math_test_modal",USER_INFO.MY_UNIQUE_ID+"_input",option,timer_id)
+
+}
+
+
+function answer_test(modal,input,option,timer_id) {
+    document.getElementById(input).addEventListener("keypress",(e)=>{
+        if (e.key==="Enter") {
+            event.preventDefault();
+            if (check_answer(document.getElementById(input).value,option)) {
+                var close_btn = document.createElement("button");
+                close_btn.setAttribute('class',"btn-close");
+                close_btn.setAttribute('data-bs-dismiss',"modal");
+                close_btn.setAttribute('aria-label',"Close");
+                document.getElementById(input).insertAdjacentElement('beforeend',close_btn);
+                close_btn.click();
+                clearInterval(timer_id)
+            }else{
+                document.getElementById(input).style.border="2px solid red";
+            }
+        }
+    })
+
+}
+
+function check_answer(input,option) {
+    var option_selected;
+    switch (option.selected) {
+        case "multiply":
+            option_selected = "*";
+            break;
+        case "divide":
+            option_selected = "/";
+            break;
+        case "plus":
+            option_selected = "+";
+            break;
+        case "minus":
+            option_selected = "-";
+            break;
+    }
+    if (input == eval(option[0] + option_selected + option[1])) {
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function start_timer() {
+    var sec_timer = 0;
+    var timer = setInterval(()=>{
+        sec_timer++;
+        if (sec_timer == 60) {
+            test_time_out(sec_timer,timer_id);
+        }
+    },1000)
+    return timer;
+
+}
+
+function test_time_out(sec_timer,timer_id) {
+    if (sec_timer == 60 && timer_id!=null) {
+        history.back()
+    }
 }
